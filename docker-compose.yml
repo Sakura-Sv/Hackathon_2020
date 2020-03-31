@@ -1,0 +1,52 @@
+version: '3.7'
+services:
+  nginx:
+    container_name: lz-nginx
+    image: nginx:1.13
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - app
+
+  redis:
+    container_name: lz-redis
+    image: redis:3.2.100
+    environment:
+      - TZ=Asia/Shanghai
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 6379:6379
+    volumes:
+      - /var/www/hackathon/redis:/data/
+    restart: unless-stopped
+
+  mysql:
+    container_name: lz-mysql
+    image: mysql/mysql-server:8.0.18
+    environment:
+      MYSQL_DATABASE: db_test
+      MYSQL_USER: guest
+      MYSQL_PASSWORD: 123456
+    volumes:
+      -  /var/www/hackathon/mysql:/var/lib/mysql
+    ports:
+      - 3306:3306
+    restart: unless-stopped
+
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - ~/.m2:/root/.m2
+    expose:
+      - 8080
+    depends_on:
+      - mysql
+      - redis
+    command: mvn clean spring-boot:run -Dspring-boot.run.profiles=docker
