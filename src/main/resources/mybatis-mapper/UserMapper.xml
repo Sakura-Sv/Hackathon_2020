@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.testdb.demo.mapper.UserMapper">
+
+    <resultMap id="User" type="com.testdb.demo.entity.User">
+        <id column="id" javaType="int"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="enable" property="enable"/>
+        <collection column="roles" property="roles" javaType="ArrayList" resultMap="Role"/>
+    </resultMap>
+
+    <resultMap id="Role" type="com.testdb.demo.entity.Role">
+        <id column="rid" property="id" javaType="int"/>
+        <result column="role_name" property="roleName"/>
+        <result column="role_value" property="roleValue"/>
+    </resultMap>
+
+    <select id="selectUserAndRoles" resultMap="User">
+        SELECT
+        u.id, username, password, enable, r.id as rid, role_name, role_value
+        FROM user u
+        LEFT JOIN user_role ur ON u.id = ur.user_id
+        LEFT JOIN urole r on ur.role_id = r.id
+        where username = #{username}
+    </select>
+
+</mapper>

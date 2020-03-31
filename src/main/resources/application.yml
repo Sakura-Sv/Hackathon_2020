@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    username: guest
+    password: 123456
+    url: jdbc:mysql://localhost/db_test?serverTimezone=GMT
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+  redis:
+    host: localhost
+    port: 6379
+    database: 1
+    lettuce:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+      shutdown-timeout: 100ms
+  mail:
+    host: smtp.qq.com
+    port: 587
+    username: sakura-cg@foxmail.com
+    password: fkxxadboixbcighg
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+    default-encoding: UTF-8
+    protocol: smtp
+    from: sakura-cg@foxmail.com
+
+mybatis-plus:
+  mapper-locations: mybatis-mapper/*.xml
