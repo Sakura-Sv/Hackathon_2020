@@ -15,7 +15,7 @@ COPY src src
 
 RUN ./mvnw package -DskipTests
 
-ARG JAR_FILE=target/demo-0.0.1-SNAPSHOT.jar
+ARG JAR_FILE=/app/target/demo-0.0.1-SNAPSHOT.jar
 
 # cp target/spring-boot-web.jar /app/app.jar
 COPY ${JAR_FILE} app.jar
