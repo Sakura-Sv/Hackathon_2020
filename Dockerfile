@@ -3,6 +3,13 @@ FROM openjdk:8-jdk-alpine
 
 WORKDIR /app
 
+COPY mvnw .
+COPY .mvn .mvn
+COPY pom.xml .
+COPY src src
+
+RUN ./mvnw package -DskipTests
+
 ARG JAR_FILE=target/demo-0.0.1-SNAPSHOT.jar
 
 # cp target/spring-boot-web.jar /opt/app/app.jar
