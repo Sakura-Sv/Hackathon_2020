@@ -9,8 +9,8 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import java.security.Principal;
+
 @RestController
 @RequestMapping(value="/users")
 @CrossOrigin(methods={RequestMethod.GET,RequestMethod.POST})

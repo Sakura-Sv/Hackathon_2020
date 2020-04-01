@@ -3,7 +3,7 @@ services:
   nginx:
     container_name: lz-nginx
     image: nginx:1.13
-    restart: unless-stopped
+    restart: always
     ports:
       - 80:80
       - 443:443
@@ -31,20 +31,23 @@ services:
       MYSQL_DATABASE: db_test
       MYSQL_USER: guest
       MYSQL_PASSWORD: 123456
+      MYSQL_ROOT_PASSWORD: 123456
     volumes:
+      -  /conf/mysql:/etc/mysql/conf.d
       -  /var/www/hackathon/mysql:/var/lib/mysql
     ports:
       - 3306:3306
     restart: unless-stopped
 
   app:
+    container_name: app
     build:
       context: ./
       dockerfile: Dockerfile
     restart: always
     volumes:
+      - ./log/:/app/log/
       - .:/app
-      - ~/.m2:/root/.m2
     expose:
       - 8080:8080
     depends_on:
