@@ -18,7 +18,7 @@ RUN ./mvnw package -DskipTests
 #ARG JAR_FILE=/app/target/demo-0.0.1-SNAPSHOT.jar
 #
 ## cp target/spring-boot-web.jar /app/app.jar
-#COPY ${JAR_FILE} app.jar
+COPY /app/target/demo-0.0.1-SNAPSHOT.jar app.jar
 
 # 芜湖 起飞✈
-ENTRYPOINT ["java","-jar","/target/demo-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]
