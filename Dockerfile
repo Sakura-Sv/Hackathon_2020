@@ -5,12 +5,14 @@ COPY pom.xml /build/
 COPY src /build/src/
 
 WORKDIR /build/
-RUN mvn package
+
+RUN mvn -B -U -e clean verify
 
 FROM openjdk:8-jre-alpine
 
-WORKDIR /app
-COPY --from=MAVEN_BUILD /build/target/demo-0.0.1-SNAPSHOT.jar /app/
+WORKDIR /
+
+COPY --from=MAVEN_BUILD /build/target/demo-0.0.1-SNAPSHOT.jar /
 
 # 芜湖 起飞✈
-ENTRYPOINT ["java","-jar","demo-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "demo-0.0.1-SNAPSHOT.jar"]
