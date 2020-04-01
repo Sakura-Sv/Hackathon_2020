@@ -14,7 +14,7 @@ services:
 
   redis:
     container_name: lz-redis
-    image: redis:3.2.100
+    image: redis:latest
     environment:
       - TZ=Asia/Shanghai
       - ALLOW_EMPTY_PASSWORD=yes
