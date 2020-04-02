@@ -29,7 +29,8 @@ services:
     image: mysql/mysql-server:8.0.18
     environment:
       MYSQL_DATABASE: db_test
-      MYSQL_ROOT_PASSWORD: 1814665426ok
+      MYSQL_USER: guest
+      MYSQL_PASSWORD: 123456
     volumes:
       -  /conf/mysql:/etc/mysql/conf.d
       -  /var/www/hackathon/mysql:/var/lib/mysql
