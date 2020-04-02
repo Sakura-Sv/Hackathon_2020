@@ -2,6 +2,7 @@ package com.testdb.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.testdb.demo.entity.BaseUser;
 import com.testdb.demo.entity.User;
 import com.testdb.demo.service.UserService;
 import com.testdb.demo.utils.AjaxResponseBody;
@@ -22,7 +23,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 @RestController
-@RequestMapping(value="/users")
+@RequestMapping(value="/api/user")
 @AjaxResponseBody
 public class UserController {
 
@@ -64,11 +65,10 @@ public class UserController {
         return Result.success("Success");
     }
 
-    @GetMapping(value = "/info", produces={"text/html"})
+    @GetMapping(value = "/info")
     @SneakyThrows
-    public Result<User> getUserInfo(Principal principal){
-        User user = us.getOne(new QueryWrapper<User>().eq("username",principal.getName()));
-        user.setPassword(null);
+    public Result<BaseUser> getUserInfo(Principal principal){
+        BaseUser user = us.getBaseInfo(principal.getName());
         return Result.success(user);
     }
 

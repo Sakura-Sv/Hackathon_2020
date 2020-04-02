@@ -32,3 +32,6 @@ build/
 
 ### 日志文件 ###
 log/
+
+### 测试用Controller ###
+/src/main/java/com/testdb/demo/controller/TestController.java

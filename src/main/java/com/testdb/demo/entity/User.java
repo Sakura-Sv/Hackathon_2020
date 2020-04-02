@@ -20,7 +20,11 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @TableName(value = "user")
-public class User implements UserDetails {
+public class User extends BaseUser implements UserDetails {
+
+    /**
+     * 用户完整模型
+     */
 
     @TableId(type = IdType.AUTO)
     private long id;

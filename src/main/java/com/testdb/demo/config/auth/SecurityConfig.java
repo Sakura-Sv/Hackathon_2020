@@ -58,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
 
-                .mvcMatchers("/users/signup", "/users/confirm/**")
+                .mvcMatchers("/api/user/signup","/api/user/signin", "/api/user/confirm/**")
                 .permitAll()
 
                 .and()
@@ -96,7 +96,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         CustomAuthenticationFilter filter = new CustomAuthenticationFilter();
         filter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
         filter.setAuthenticationFailureHandler(authenticationFailureHandler);
-        filter.setFilterProcessesUrl("/users/signin");
+        filter.setFilterProcessesUrl("/api/user/signin");
 
         filter.setAuthenticationManager(authenticationManagerBean());
         return filter;

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.testdb.demo.entity.BaseUser;
 import com.testdb.demo.entity.User;
 import com.testdb.demo.mapper.UserMapper;
 import com.testdb.demo.utils.DateTimeUtil;
@@ -58,6 +59,11 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         String context = "<a href=\"http://127.0.0.1:8080/users/confirm/?confirmCode=" + user.getConfirmCode() +
                 "\">激活请点击:" + user.getConfirmCode() + "</a>";
         emailServiceImpl.sendHtmlMail(to, subject, context);
+    }
+
+    @SneakyThrows
+    public BaseUser getBaseInfo(String username){
+        return userMapper.selectUserBaseInfo(username);
     }
 
     @Transactional

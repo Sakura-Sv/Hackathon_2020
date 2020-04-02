@@ -1,6 +1,7 @@
 package com.testdb.demo.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.testdb.demo.entity.BaseUser;
 import com.testdb.demo.entity.Role;
 import com.testdb.demo.entity.User;
 import org.apache.ibatis.annotations.*;
@@ -27,4 +28,7 @@ public interface UserMapper extends BaseMapper<User> {
     User selectUserAndRoles(@Param("username") String username);
 
     void updateUserInfo(User user);
+
+    @Select("SELECT username, enable, birthday, sex, description, nickname FROM user WHERE username=#{username} ")
+    BaseUser selectUserBaseInfo(@Param("username") String username);
 }
