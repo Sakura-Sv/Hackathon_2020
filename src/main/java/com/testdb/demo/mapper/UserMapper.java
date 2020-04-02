@@ -22,9 +22,9 @@ public interface UserMapper extends BaseMapper<User> {
     Boolean createUser(@Param("user_id") String user_id, @Param("role_id") String role_id);
 
     @Select("SELECT id FROM user WHERE username=#{username}")
-    int selectIdByUsername(@Param("username") String username);
+    Integer selectIdByUsername(@Param("username") String username);
 
     User selectUserAndRoles(@Param("username") String username);
 
-    void updateUserInfo(User user);
+    Void updateUserInfo(User user);
 }
