@@ -58,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
 
-                .mvcMatchers("/users/signup", "users/confirm/**")
+                .mvcMatchers("/users/signup", "/users/confirm/**")
                 .permitAll()
 
                 .and()

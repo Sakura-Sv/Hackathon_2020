@@ -25,11 +25,13 @@ public enum ResultStatus {
         this.message = message;
     }
 
-    public void setCode(Integer code) {
+    public ResultStatus setCode(Integer code) {
         this.code = code;
+        return this;
     }
 
-    public void setMessage(String message){
+    public ResultStatus setMessage(String message){
         this.message = message;
+        return this;
     }
 }

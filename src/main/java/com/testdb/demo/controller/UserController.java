@@ -38,10 +38,10 @@ public class UserController {
     public Result<String> signUp(@Validated @RequestBody User user,
                                  BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            return Result.failure(ResultStatus.WRONG_PARAMETERS, "账号必须为可用的邮箱！");
+            return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage( "账号必须为可用的邮箱！"));
         }
         if(us.getOne(new QueryWrapper<User>().eq("username", user.getUsername()))!=null){
-            return Result.failure(ResultStatus.WRONG_PARAMETERS,"该邮箱已被注册！");
+            return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("该邮箱已被注册！"));
         }
         us.signUp(user);
         return Result.success("Success!");
@@ -56,10 +56,10 @@ public class UserController {
     public Result<String> confirmUser(@RequestParam String confirmCode){
         int status = us.confirmUser(confirmCode);
         if(status == 2){
-            return Result.failure(ResultStatus.WRONG_PARAMETERS,"该验证码已过期！");
+            return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("该验证码已过期！"));
         }
         else if(status == 1){
-            return Result.failure(ResultStatus.WRONG_PARAMETERS,"该账号已被激活！");
+            return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("该账号已被激活！"));
         }
         return Result.success("Success");
     }
