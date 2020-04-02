@@ -4,6 +4,7 @@ import com.testdb.demo.service.CustomUserDetailsService;
 import com.testdb.demo.utils.JwtTokenUtil;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,6 +44,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                 }
             }
         }
+        response.setHeader("content-type", MediaType.APPLICATION_JSON.toString()+";charset=utf-8");
         chain.doFilter(request, response);
     }
 

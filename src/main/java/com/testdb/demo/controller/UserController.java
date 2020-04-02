@@ -54,7 +54,7 @@ public class UserController {
         return Result.success("Success");
     }
 
-    @GetMapping("/info")
+    @GetMapping(value = "/info", produces={"text/html"})
     @SneakyThrows
     public Result<User> getUserInfo(Principal principal){
         User user = us.getOne(new QueryWrapper<User>().eq("username",principal.getName()));

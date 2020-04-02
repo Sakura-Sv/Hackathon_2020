@@ -31,6 +31,7 @@ services:
       MYSQL_DATABASE: db_test
       MYSQL_USER: guest
       MYSQL_PASSWORD: 123456
+      MYSQL_ROOT_PASSWORD: 1814665426ok
     volumes:
       -  /conf/mysql:/etc/mysql/conf.d
       -  /var/www/hackathon/mysql:/var/lib/mysql
