@@ -1,4 +1,4 @@
-package com.testdb.demo.config;
+package com.testdb.demo.config.auth;
 
 import com.alibaba.fastjson.JSON;
 import com.testdb.demo.entity.User;

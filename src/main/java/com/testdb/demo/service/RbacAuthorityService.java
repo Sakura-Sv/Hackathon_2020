@@ -27,8 +27,6 @@ public class RbacAuthorityService {
             //禁用未认证账户
             if(!user.isEnabled()){ return false; }
 
-            String username = user.getUsername();
-
             //获取资源
             Set<String> urls = new HashSet();
             urls.add("/**"); // 这些 url 都是要登录后才能访问，且其他的 url 都不能访问！

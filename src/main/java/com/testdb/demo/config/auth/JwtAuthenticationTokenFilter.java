@@ -1,4 +1,4 @@
-package com.testdb.demo.config;
+package com.testdb.demo.config.auth;
 
 import com.testdb.demo.service.CustomUserDetailsService;
 import com.testdb.demo.utils.JwtTokenUtil;

@@ -26,4 +26,5 @@ public interface UserMapper extends BaseMapper<User> {
 
     User selectUserAndRoles(@Param("username") String username);
 
+    void updateUserInfo(User user);
 }

@@ -11,14 +11,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.validation.constraints.Email;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 //@Builder
 @Data
@@ -36,6 +32,10 @@ public class User implements UserDetails {
     @TableField(exist = false)
     private List<Role> roles;
     private String confirmCode;
+    private LocalDateTime createdTime;
+    private LocalDate birthday;
+    private String sex;
+    private String description;
 
     public User(String username, String password, List<Role>roles){
         this.username = username;

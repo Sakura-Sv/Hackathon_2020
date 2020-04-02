@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.time.Duration;
+import java.time.LocalDate;
 
 @Service
 public class UserService extends ServiceImpl<UserMapper, User> {
@@ -56,13 +58,22 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
     @Transactional
     @SneakyThrows
-    public Boolean confirmUser(String confirmCode){
+    public int confirmUser(String confirmCode){
         User user = userMapper.selectOne(new QueryWrapper<User>().eq("confirm_code", confirmCode));
-        if(!user.getEnable()){
+        if(Duration.between(LocalDate.now(), user.getCreatedTime()).toDays()<=1){
+            return 2;
+        }
+        if( !user.getEnable() ){
             user.setEnable(true);
             userMapper.update(user, new QueryWrapper<User>().eq("username", user.getUsername()));
+            return 0;
         }
-        return true;
+        return 1;
+    }
+
+    @SneakyThrows
+    public void updateUserInfo(User user){
+        userMapper.updateUserInfo(user);
     }
 
 }

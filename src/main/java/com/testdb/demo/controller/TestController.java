@@ -32,7 +32,6 @@ import java.util.concurrent.TimeUnit;
 
 @RestController("/test")
 @PreAuthorize("@RbacAuthorityService.test(authentication)")
-//@CrossOrigin(origins={"http://localhost:4200"},methods = {RequestMethod.GET})
 public class TestController {
 
     /**
