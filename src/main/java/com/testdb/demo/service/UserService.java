@@ -1,10 +1,12 @@
 package com.testdb.demo.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.testdb.demo.entity.User;
 import com.testdb.demo.mapper.UserMapper;
+import com.testdb.demo.utils.DateTimeUtil;
 import com.testdb.demo.utils.UuidMaker;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.security.Principal;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Service
 public class UserService extends ServiceImpl<UserMapper, User> {
@@ -59,6 +63,8 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     @Transactional
     @SneakyThrows
     public int confirmUser(String confirmCode){
+        //2 验证码已过期 1 用户已激活 0 成功
+
         User user = userMapper.selectOne(new QueryWrapper<User>().eq("confirm_code", confirmCode));
         if(Duration.between(LocalDate.now(), user.getCreatedTime()).toDays()<=1){
             return 2;
@@ -71,8 +77,29 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         return 1;
     }
 
+    @Transactional
     @SneakyThrows
-    public void updateUserInfo(User user){
+    public void updateUserInfo(Principal principal,
+                               JSONObject jsonParam){
+        String sex = jsonParam.getString("sex");
+        Date birthday = jsonParam.getDate("birthday");
+        String description = jsonParam.getString("description");
+        String nickname = jsonParam.getString("nickname");
+        User user = getOne(new QueryWrapper<User>().eq("username",principal.getName()));
+
+        if(sex != null) {
+            user.setSex(sex);
+        }
+        if(birthday != null) {
+            user.setBirthday(DateTimeUtil.toLocalDateViaInstant(birthday));
+        }
+        if(description != null) {
+            user.setDescription(description);
+        }
+        if(nickname != null) {
+            user.setNickname(nickname);
+        }
+
         userMapper.updateUserInfo(user);
     }
 

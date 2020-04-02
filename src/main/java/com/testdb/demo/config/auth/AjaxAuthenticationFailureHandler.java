@@ -24,7 +24,8 @@ public class AjaxAuthenticationFailureHandler implements AuthenticationFailureHa
                                         AuthenticationException e){
 
         httpServletResponse.setHeader("Content-Type", MediaType.APPLICATION_JSON.toString());
-        httpServletResponse.getWriter().write(JSON.toJSONString(Result.failure(ResultStatus.BAD_REQUEST)));
+        httpServletResponse.getWriter().write(JSON.toJSONString(Result.failure(ResultStatus.WRONG_PARAMETERS,
+                "用户名或密码错误！")));
 
     }
 

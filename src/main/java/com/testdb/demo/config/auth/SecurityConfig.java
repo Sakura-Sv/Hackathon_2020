@@ -85,10 +85,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler(logoutSuccessHandler)
                 .permitAll();
 
-        // 记住我
-//        http.rememberMe().rememberMeParameter("remember-me")
-//                .userDetailsService(userDetailsService).tokenValiditySeconds(300);
-
         http.exceptionHandling().accessDeniedHandler(accessDeniedHandler); // 无权访问 JSON 格式的数据
         http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class); // JWT Filter
         http.addFilterAt(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class); // 覆盖默认表格登录
@@ -102,7 +98,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         filter.setAuthenticationFailureHandler(authenticationFailureHandler);
         filter.setFilterProcessesUrl("/users/signin");
 
-        //这句很关键，重用WebSecurityConfigurerAdapter配置的AuthenticationManager，不然要自己组装AuthenticationManager
         filter.setAuthenticationManager(authenticationManagerBean());
         return filter;
     }

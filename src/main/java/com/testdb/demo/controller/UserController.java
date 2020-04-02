@@ -7,9 +7,12 @@ import com.testdb.demo.service.UserService;
 import com.testdb.demo.utils.AjaxResponseBody;
 import com.testdb.demo.utils.DateTimeUtil;
 import com.testdb.demo.utils.Result;
+import com.testdb.demo.utils.ResultStatus;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
@@ -32,9 +35,16 @@ public class UserController {
 
     @PostMapping("/signup")
     @SneakyThrows
-    public Result<Void> signUp(@Validated @RequestBody User user){
+    public Result<String> signUp(@Validated @RequestBody User user,
+                                 BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return Result.failure(ResultStatus.WRONG_PARAMETERS, "账号必须为可用的邮箱！");
+        }
+        if(us.getOne(new QueryWrapper<User>().eq("username", user.getUsername()))!=null){
+            return Result.failure(ResultStatus.WRONG_PARAMETERS,"该邮箱已被注册！");
+        }
         us.signUp(user);
-        return Result.success();
+        return Result.success("Success!");
     }
 
     @PostMapping("/signin")
@@ -46,10 +56,10 @@ public class UserController {
     public Result<String> confirmUser(@RequestParam String confirmCode){
         int status = us.confirmUser(confirmCode);
         if(status == 2){
-            return Result.failure("Your confirm code is expried!");
+            return Result.failure(ResultStatus.WRONG_PARAMETERS,"该验证码已过期！");
         }
         else if(status == 1){
-            return Result.failure("Your account is already available!");
+            return Result.failure(ResultStatus.WRONG_PARAMETERS,"该账号已被激活！");
         }
         return Result.success("Success");
     }
@@ -66,23 +76,7 @@ public class UserController {
     @SneakyThrows
     public Result<Void> setUserInfo(Principal principal,
                                     @RequestBody JSONObject jsonParam){
-        String sex = jsonParam.getString("sex");
-        Date birthday = jsonParam.getDate("birthday");
-        String description = jsonParam.getString("description");
-
-        User user = us.getOne(new QueryWrapper<User>().eq("username",principal.getName()));
-
-        if(sex != null) {
-            user.setSex(sex);
-        }
-        if(birthday != null) {
-            user.setBirthday(DateTimeUtil.toLocalDateViaInstant(birthday));
-        }
-        if(description != null) {
-            user.setDescription(description);
-        }
-
-        us.updateUserInfo(user);
+        us.updateUserInfo(principal, jsonParam);
         return Result.success();
     }
 

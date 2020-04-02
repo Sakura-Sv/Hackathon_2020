@@ -36,10 +36,12 @@ public class User implements UserDetails {
     private LocalDate birthday;
     private String sex;
     private String description;
+    private String nickname;
 
-    public User(String username, String password, List<Role>roles){
+    public User(String username, String password, String nickname, List<Role>roles){
         this.username = username;
         this.password = password;
+        this.nickname = nickname;
         this.roles = roles;
     }
 

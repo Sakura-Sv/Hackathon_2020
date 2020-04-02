@@ -25,6 +25,10 @@ public class Result<T> {
         return new Result<Void>(ResultStatus.SUCCESS, null);
     }
 
+    public static Result<String> success(String temp) {
+        return new Result<String>(ResultStatus.SUCCESS, null);
+    }
+
     public static <T> Result<T> success(T data) {
         return new Result<T>(ResultStatus.SUCCESS, data);
     }
@@ -38,10 +42,6 @@ public class Result<T> {
 
     public static <T> Result<T> failure() {
         return new Result<T>(ResultStatus.INTERNAL_SERVER_ERROR, null);
-    }
-
-    public static <T> Result<T> failure(T data) {
-        return new Result<T>(ResultStatus.WRONG_PARAMETERS, data);
     }
 
     public static <T> Result<T> failure(ResultStatus resultStatus) {

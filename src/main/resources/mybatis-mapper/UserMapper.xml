@@ -22,7 +22,8 @@
         <set>
             <if test="sex != null">sex = #{sex},</if>
             <if test="birthday != null">birthday = #{birthday},</if>
-            <if test="description != null">description = #{description}</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="nickname != null">nickname = #{nickname}</if>
         </set>
         WHERE username = #{username}
     </update>
