@@ -1,5 +1,6 @@
 package com.testdb.demo.utils;
 
+import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
@@ -8,11 +9,15 @@ import com.qiniu.storage.Region;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
+import com.qiniu.util.StringMap;
+import com.testdb.demo.entity.QiniuCallbackMessage;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class QiniuUtil {
@@ -25,27 +30,37 @@ public class QiniuUtil {
     static String SECRET_KEY = "lgQHDim9JWvhZUJDU0Od2I-WObd1IGCAmJLIeI8N";
     static String bucketName = "test-lz";
 
-    String key = "";
-    String FilePath = "";
+    static String key = null;
+    static long expireSeconds = 600L;
+
+    static String callbackUrl = "http://39.107.239.89/api/callback";
+    static String callbackUrlTest = "http://h63gtc.natappfree.cc/api/test/callback";
+    static String callbackBodyType = "application/json";
+
 
     static Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
     static String uploadToken = auth.uploadToken(bucketName);
 
     // 华东仓库
-    Configuration cfg = new Configuration(Region.region0());
-    UploadManager uploadManager = new UploadManager(cfg);
+    static Configuration cfg = new Configuration(Region.region0());
+    static UploadManager uploadManager = new UploadManager(cfg);
 
     // 获取上传令牌
     @SneakyThrows
-    public static String getToken(){
-        System.out.println(bucketName);
-        return auth.uploadToken(bucketName);
+    public static String getToken(String uploadPath){
+        key = uploadPath;
+        return auth.uploadToken(bucketName, key);
     }
 
-    // 应该用不到这个
-    public void upload(String filePath) throws IOException {
+    @SneakyThrows
+    public static String getTokenWithPolicy(String uploadPath, StringMap putPolicy){
+        key = uploadPath;
+        return auth.uploadToken(bucketName, key, expireSeconds, putPolicy);
+    }
+
+    public static void uploadTest(String sourceUrl,String targetPath, String uploadToken) throws IOException {
         try {
-            Response response = uploadManager.put(FilePath, key, uploadToken);
+            Response response = uploadManager.put(sourceUrl, targetPath, uploadToken);
             DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
             System.out.println(putRet.key);
             System.out.println(putRet.hash);
@@ -60,4 +75,18 @@ public class QiniuUtil {
         }
     }
 
+    @SneakyThrows
+    public static Map<String, Object> validateCallback(HttpServletRequest request,
+                                                           String suffixPath) {
+        Map<String, Object> results = new HashMap<>();
+        callbackUrl = callbackUrl + suffixPath;
+        String callbackAuthHeader = request.getHeader("Authorization");
+        byte[] callbackBody = new byte[2048];
+        request.getInputStream().read(callbackBody);
+        QiniuCallbackMessage message = JSON.parseObject(callbackBody, QiniuCallbackMessage.class);
+        results.put("message", message);
+        results.put("valid", auth.isValidCallback
+                (callbackAuthHeader, callbackUrl, callbackBody, callbackBodyType));
+        return results;
+    }
 }

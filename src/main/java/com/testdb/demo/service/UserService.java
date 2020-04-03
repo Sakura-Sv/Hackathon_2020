@@ -2,24 +2,20 @@ package com.testdb.demo.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.qiniu.util.StringMap;
 import com.testdb.demo.entity.BaseUser;
 import com.testdb.demo.entity.User;
 import com.testdb.demo.mapper.UserMapper;
 import com.testdb.demo.utils.DateTimeUtil;
+import com.testdb.demo.utils.QiniuUtil;
 import com.testdb.demo.utils.UuidMaker;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.security.Principal;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Date;
@@ -85,13 +81,13 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
     @Transactional
     @SneakyThrows
-    public void updateUserInfo(Principal principal,
+    public void updateUserInfo(String username,
                                JSONObject jsonParam){
         String sex = jsonParam.getString("sex");
         Date birthday = jsonParam.getDate("birthday");
         String description = jsonParam.getString("description");
         String nickname = jsonParam.getString("nickname");
-        User user = getOne(new QueryWrapper<User>().eq("username",principal.getName()));
+        User user = getOne(new QueryWrapper<User>().eq("username",username));
 
         if(sex != null) {
             user.setSex(sex);
@@ -108,5 +104,31 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
         userMapper.updateUserInfo(user);
     }
+
+    @SneakyThrows
+    public void uploadAvatarTest(String username){
+        StringMap policy = new StringMap();
+        policy.put("callbackUrl", "http://h63gtc.natappfree.cc/api/test/callback");
+        policy.put("callbackBody",
+                "{\"username\":" + "\""+username+"\"," + "\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"bucket\":\"$(bucket)\"}");
+        policy.put("callbackBodyType", "application/json");
+        String sourceUrl = "D:\\OneDrive\\桌面\\23333.jpg";
+        String targetUrl = "avatar/" + username;
+        String token = QiniuUtil.getTokenWithPolicy(targetUrl, policy);
+        QiniuUtil.uploadTest(sourceUrl, targetUrl, token);
+    }
+
+    @SneakyThrows
+    public String uploadAvatar(String username){
+        StringMap policy = new StringMap();
+        policy.put("callbackUrl", "http://39.107.239.89/api/callback/avatar");
+        policy.put("callbackBody",
+                "{\"username\":" + "\""+username+"\"," + "\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"bucket\":\"$(bucket)\"}");
+        policy.put("callbackBodyType", "application/json");
+        String targetUrl = "avatar/" + username;
+        String token = QiniuUtil.getTokenWithPolicy(targetUrl, policy);
+        return token;
+    }
+
 
 }

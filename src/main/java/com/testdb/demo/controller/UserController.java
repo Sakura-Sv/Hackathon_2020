@@ -5,22 +5,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.testdb.demo.entity.BaseUser;
 import com.testdb.demo.entity.User;
 import com.testdb.demo.service.UserService;
-import com.testdb.demo.utils.AjaxResponseBody;
-import com.testdb.demo.utils.DateTimeUtil;
-import com.testdb.demo.utils.Result;
-import com.testdb.demo.utils.ResultStatus;
+import com.testdb.demo.utils.*;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.HashMap;
 
 @RestController
 @RequestMapping(value="/api/user")
@@ -62,7 +53,7 @@ public class UserController {
         else if(status == 1){
             return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("该账号已被激活！"));
         }
-        return Result.success("Success");
+        return Result.success(null);
     }
 
     @GetMapping(value = "/info")
@@ -76,7 +67,20 @@ public class UserController {
     @SneakyThrows
     public Result<Void> setUserInfo(Principal principal,
                                     @RequestBody JSONObject jsonParam){
-        us.updateUserInfo(principal, jsonParam);
+        us.updateUserInfo(principal.getName(), jsonParam);
+        return Result.success();
+    }
+
+    @GetMapping("/avatar")
+    public Result<String> getAvatar(Principal principal){
+        return Result.success(us.getOne(new QueryWrapper<User>()
+                .select("avatar").eq("username", principal.getName()))
+                .getAvatar());
+    }
+
+    @PostMapping("/avatar")
+    public Result<Void> getAvatarToken(Principal principal){
+        us.uploadAvatar(principal.getName());
         return Result.success();
     }
 

@@ -26,7 +26,7 @@ public class Result<T> {
     }
 
     public static Result<String> success(String temp) {
-        return new Result<String>(ResultStatus.SUCCESS, null);
+        return new Result<String>(ResultStatus.SUCCESS, temp);
     }
 
     public static <T> Result<T> success(T data) {

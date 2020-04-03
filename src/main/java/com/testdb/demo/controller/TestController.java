@@ -1,37 +1,27 @@
 package com.testdb.demo.controller;
 
-import com.google.gson.Gson;
-import com.qiniu.common.QiniuException;
-import com.qiniu.http.Response;
-import com.qiniu.storage.Configuration;
-import com.qiniu.storage.Region;
-import com.qiniu.storage.UploadManager;
-import com.qiniu.storage.model.DefaultPutRet;
-import com.qiniu.util.Auth;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.testdb.demo.entity.QiniuCallbackMessage;
+import com.testdb.demo.entity.User;
+import com.testdb.demo.service.UserService;
 import com.testdb.demo.utils.QiniuUtil;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
-import lombok.var;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Key;
-import java.sql.Time;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.TimeUnit;
+import java.util.Map;
 
-@RestController("/test")
+@RestController
+@RequestMapping(value={("/api/test")})
 @PreAuthorize("@RbacAuthorityService.test(authentication)")
+@Slf4j
 public class TestController {
 
     /**
@@ -44,6 +34,9 @@ public class TestController {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Autowired
+    private UserService us;
+
 //    @ResponseBody
 //    @GetMapping("/user")
 //    public List<Map<String, Object>> map(){
@@ -52,25 +45,40 @@ public class TestController {
 //    }
 
     @GetMapping("/redis")
-    public void testRedis(){
-        stringRedisTemplate.opsForValue().set("lz", "hjh",3, TimeUnit.MINUTES);
+    public void testRedis() {
+        stringRedisTemplate.opsForValue().set("lz", "hjh", 3, TimeUnit.MINUTES);
         System.out.println(stringRedisTemplate.opsForValue().get("lz"));
     }
 
     @GetMapping("/url")
-    public String getUrl(){
+    public String getUrl() {
         String fileName = "test1.jpg";
         String domainOfBucket = "http://devtools.qiniu.com";
         String finalUrl = String.format("%s/%s", domainOfBucket, fileName);
         return finalUrl;
     }
 
-
-    @ResponseBody
-    @GetMapping("/token")
-    public String test(){
-        return QiniuUtil.getToken();
+    @SneakyThrows
+    @PostMapping("/callback")
+    public void callback(HttpServletRequest request) {
+        Map<String, Object> results = QiniuUtil.validateCallback(request, "");
+        System.out.println(results.get("valid"));
+        if((Boolean)results.get("valid")){
+            QiniuCallbackMessage message = (QiniuCallbackMessage) results.get("message");
+            String newUrl = "http://q81okm9pv.bkt.clouddn.com/avatar/"+message.getUsername();
+            us.update(new UpdateWrapper<User>().eq("username", message.getUsername())
+                    .set("avatar", newUrl));
+        }
+        // 设置返回给七牛的数据
+//            log.info(JSON.parseObject(sb.toString(), QiniuCallbackMessage.class).getUsername());
     }
-
-
 }
+
+//    @ResponseBody
+//    @GetMapping("/token")
+//    public String test(){
+//        return QiniuUtil.getToken();
+//    }
+
+
+

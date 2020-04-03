@@ -58,7 +58,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
 
-                .mvcMatchers("/api/user/signup","/api/user/signin", "/api/user/confirm/**")
+                .mvcMatchers("/api/user/signup", "/api/callback",
+                        "/api/test/**", "/api/user/signin", "/api/user/confirm/**")
                 .permitAll()
 
                 .and()
@@ -67,15 +68,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
 
-                .mvcMatchers("/token")
-                .authenticated()
-
                 .anyRequest()
                 .access("@RbacAuthorityService.hasPermission(request,authentication)") // RBAC 动态 url 认证
 
                 .and()
                 .formLogin()  //开启登录
-                .loginPage("/")
+                .loginPage("/api/user/signin")
                 .successHandler(authenticationSuccessHandler) // 登录成功
                 .failureHandler(authenticationFailureHandler) // 登录失败
                 .permitAll()
