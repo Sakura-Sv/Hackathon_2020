@@ -1,10 +1,13 @@
 package com.testdb.demo.service;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qiniu.util.StringMap;
 import com.testdb.demo.entity.BaseUser;
+import com.testdb.demo.entity.QiniuCallbackMessage;
 import com.testdb.demo.entity.User;
 import com.testdb.demo.mapper.UserMapper;
 import com.testdb.demo.utils.DateTimeUtil;
@@ -16,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Date;
@@ -128,6 +132,19 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         String targetUrl = "avatar/" + username;
         String token = QiniuUtil.getTokenWithPolicy(targetUrl, policy);
         return token;
+    }
+
+    @SneakyThrows
+    public void uploadAvatarCallback(HttpServletRequest request){
+        byte[] callbackBody = new byte[2048];
+        request.getInputStream().read(callbackBody);
+        QiniuCallbackMessage message = JSON.parseObject(callbackBody, QiniuCallbackMessage.class);
+        String username = message.getUsername();
+        if(QiniuUtil.validateCallback(request, callbackBody, username)){
+            String newUrl = "http://q81okm9pv.bkt.clouddn.com/avatar/"+username;
+            update(new UpdateWrapper<User>().eq("username", username)
+                    .set("avatar", newUrl));
+        }
     }
 
 

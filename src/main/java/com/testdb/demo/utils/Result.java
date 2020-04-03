@@ -25,8 +25,8 @@ public class Result<T> {
         return new Result<Void>(ResultStatus.SUCCESS, null);
     }
 
-    public static Result<String> success(String temp) {
-        return new Result<String>(ResultStatus.SUCCESS, temp);
+    public static Result<Void> success(ResultStatus resultStatus) {
+        return new Result<Void>(ResultStatus.SUCCESS, null);
     }
 
     public static <T> Result<T> success(T data) {

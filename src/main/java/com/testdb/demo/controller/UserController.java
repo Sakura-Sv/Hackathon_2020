@@ -45,7 +45,7 @@ public class UserController {
     }
 
     @GetMapping("/confirm")
-    public Result<String> confirmUser(@RequestParam String confirmCode){
+    public Result<Void> confirmUser(@RequestParam String confirmCode){
         int status = us.confirmUser(confirmCode);
         if(status == 2){
             return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("该验证码已过期！"));
@@ -53,7 +53,7 @@ public class UserController {
         else if(status == 1){
             return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("该账号已被激活！"));
         }
-        return Result.success(null);
+        return Result.success();
     }
 
     @GetMapping(value = "/info")

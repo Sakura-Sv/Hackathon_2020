@@ -1,5 +1,6 @@
 package com.testdb.demo.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.testdb.demo.entity.QiniuCallbackMessage;
 import com.testdb.demo.entity.User;
@@ -27,14 +28,10 @@ public class CallbackController {
 
     @PostMapping("/avatar")
     @SneakyThrows
-    public void updateUserAvater(HttpServletRequest request){
-        Map<String, Object> results = QiniuUtil.validateCallback(request, "");
-        if((Boolean)results.get("valid")){
-            QiniuCallbackMessage message = (QiniuCallbackMessage) results.get("message");
-            String newUrl = "http://q81okm9pv.bkt.clouddn.com/avatar/"+message.getUsername();
-            us.update(new UpdateWrapper<User>().eq("username", message.getUsername())
-                    .set("avatar", newUrl));
-        }
+    public void updateUserAvater(HttpServletRequest request) {
+        us.uploadAvatarCallback(request);
     }
 
 }
+
+

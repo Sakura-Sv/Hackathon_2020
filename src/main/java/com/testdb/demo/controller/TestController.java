@@ -1,5 +1,6 @@
 package com.testdb.demo.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.testdb.demo.entity.QiniuCallbackMessage;
@@ -29,20 +30,10 @@ public class TestController {
      */
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
     @Autowired
     private UserService us;
-
-//    @ResponseBody
-//    @GetMapping("/user")
-//    public List<Map<String, Object>> map(){
-//        List<Map<String, Object>> list = jdbcTemplate.queryForList("SELECT name, fullname FROM user");
-//        return list;
-//    }
 
     @GetMapping("/redis")
     public void testRedis() {
@@ -61,24 +52,14 @@ public class TestController {
     @SneakyThrows
     @PostMapping("/callback")
     public void callback(HttpServletRequest request) {
-        Map<String, Object> results = QiniuUtil.validateCallback(request, "");
-        System.out.println(results.get("valid"));
-        if((Boolean)results.get("valid")){
-            QiniuCallbackMessage message = (QiniuCallbackMessage) results.get("message");
-            String newUrl = "http://q81okm9pv.bkt.clouddn.com/avatar/"+message.getUsername();
-            us.update(new UpdateWrapper<User>().eq("username", message.getUsername())
+        byte[] callbackBody = new byte[2048];
+        request.getInputStream().read(callbackBody);
+        QiniuCallbackMessage message = JSON.parseObject(callbackBody, QiniuCallbackMessage.class);
+        String username = message.getUsername();
+        if(QiniuUtil.validateCallback(request, callbackBody, username)){
+            String newUrl = "http://q81okm9pv.bkt.clouddn.com/avatar/"+username;
+            us.update(new UpdateWrapper<User>().eq("username", username)
                     .set("avatar", newUrl));
         }
-        // 设置返回给七牛的数据
-//            log.info(JSON.parseObject(sb.toString(), QiniuCallbackMessage.class).getUsername());
     }
 }
-
-//    @ResponseBody
-//    @GetMapping("/token")
-//    public String test(){
-//        return QiniuUtil.getToken();
-//    }
-
-
-

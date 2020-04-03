@@ -76,17 +76,20 @@ public class QiniuUtil {
     }
 
     @SneakyThrows
-    public static Map<String, Object> validateCallback(HttpServletRequest request,
-                                                           String suffixPath) {
-        Map<String, Object> results = new HashMap<>();
+    public static Boolean validateCallback(HttpServletRequest request,
+                                               byte[] callbackBody
+            ,String suffixPath) {
         callbackUrl = callbackUrl + suffixPath;
         String callbackAuthHeader = request.getHeader("Authorization");
-        byte[] callbackBody = new byte[2048];
-        request.getInputStream().read(callbackBody);
-        QiniuCallbackMessage message = JSON.parseObject(callbackBody, QiniuCallbackMessage.class);
-        results.put("message", message);
-        results.put("valid", auth.isValidCallback
-                (callbackAuthHeader, callbackUrl, callbackBody, callbackBodyType));
-        return results;
+        return auth.isValidCallback(callbackAuthHeader, callbackUrlTest, callbackBody, callbackBodyType);
+    }
+
+    @SneakyThrows
+    public static Boolean validateCallbackTest(HttpServletRequest request,
+                                                           byte[] callbackBody
+                                                           ,String suffixPath) {
+        callbackUrl = callbackUrl + suffixPath;
+        String callbackAuthHeader = request.getHeader("Authorization");
+        return auth.isValidCallback(callbackAuthHeader, callbackUrlTest, callbackBody, callbackBodyType);
     }
 }
