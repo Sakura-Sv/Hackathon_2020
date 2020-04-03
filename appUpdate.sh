@@ -1,3 +1,4 @@
+git stash
 git pull
 mvn clean
 mvn package
