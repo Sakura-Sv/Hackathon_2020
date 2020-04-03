@@ -79,9 +79,9 @@ public class UserController {
     }
 
     @PostMapping("/avatar")
-    public Result<Void> getAvatarToken(Principal principal){
-        us.uploadAvatar(principal.getName());
-        return Result.success();
+    public Result<String> getAvatarToken(Principal principal){
+        String token = us.uploadAvatar(principal.getName());
+        return Result.success(token);
     }
 
 }
