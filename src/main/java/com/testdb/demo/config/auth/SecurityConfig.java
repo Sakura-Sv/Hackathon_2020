@@ -59,7 +59,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 
                 .mvcMatchers("/api/user/signup", "/api/callback/**",
-                        "/api/test/**", "/api/user/signin", "/api/user/confirm/**")
+                        "/api/test/**", "/api/user/signin", "/api/user/confirm/**",
+                        "/api/address/**")
                 .permitAll()
 
                 .and()
