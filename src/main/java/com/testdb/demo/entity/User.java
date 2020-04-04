@@ -42,6 +42,7 @@ public class User extends BaseUser implements UserDetails {
     private String description;
     private String nickname;
     private String avatar;
+    private String address;
 
     public User(String username, String password, String nickname, List<Role>roles){
         this.username = username;

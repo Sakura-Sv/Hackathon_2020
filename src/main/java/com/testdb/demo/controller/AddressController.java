@@ -31,7 +31,7 @@ public class AddressController {
 
     @GetMapping("/city")
     public Result<List<HashMap<String, String>>> getCity(@RequestParam("pid") String provinceId ){
-        return Result.success(am.getCity(provinceId));
+        return Result.success(am.getCityByPid(provinceId));
     }
 
 }

@@ -15,9 +15,12 @@ public interface AddressMapper {
     @Select("SELECT cname FROM country")
     List<String> getCountry();
 
-    @Select("SELECT id, sname FROM region where level = 1")
+    @Select("SELECT id, sname FROM region WHERE level = 1")
     List<HashMap<String, String>> getProvince();
 
-    @Select("SELECT pid, sname FROM region where level=2 AND pid=#{provinceId}")
-    List<HashMap<String, String>> getCity(@Param("proId") String provinceId);
+    @Select("SELECT id, sname FROM region WHERE level=2 AND pid=#{provinceId}")
+    List<HashMap<String, String>> getCityByPid(@Param("provinceId") String provinceId);
+
+    @Select("SELECT mername FROM region WHERE id=#{cityId}")
+    String getCityById(@Param("cityId") String cityId);
 }

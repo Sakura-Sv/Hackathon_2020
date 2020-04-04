@@ -19,4 +19,5 @@ public class BaseUser {
     private String description;
     private String nickname;
     private String avatar;
+    private String address;
 }

@@ -17,13 +17,15 @@
         <result column="role_name" property="roleName"/>
         <result column="role_value" property="roleValue"/>
     </resultMap>
+
     <update id="updateUserInfo">
         UPDATE user
         <set>
             <if test="sex != null">sex = #{sex},</if>
             <if test="birthday != null">birthday = #{birthday},</if>
             <if test="description != null">description = #{description},</if>
-            <if test="nickname != null">nickname = #{nickname}</if>
+            <if test="nickname != null">nickname = #{nickname},</if>
+            <if test="address != null">address = #{address}</if>
         </set>
         WHERE username = #{username}
     </update>

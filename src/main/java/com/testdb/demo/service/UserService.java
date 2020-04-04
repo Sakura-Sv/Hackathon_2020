@@ -9,6 +9,7 @@ import com.qiniu.util.StringMap;
 import com.testdb.demo.entity.BaseUser;
 import com.testdb.demo.entity.QiniuCallbackMessage;
 import com.testdb.demo.entity.User;
+import com.testdb.demo.mapper.AddressMapper;
 import com.testdb.demo.mapper.UserMapper;
 import com.testdb.demo.utils.DateTimeUtil;
 import com.testdb.demo.utils.QiniuUtil;
@@ -29,6 +30,9 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    AddressMapper addressMapper;
 
     @Autowired
     EmailServiceImpl emailServiceImpl;
@@ -91,6 +95,8 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         Date birthday = jsonParam.getDate("birthday");
         String description = jsonParam.getString("description");
         String nickname = jsonParam.getString("nickname");
+        String address = jsonParam.getString("address");
+        String foreignAddress = jsonParam.getString("foreignAddress");
         User user = getOne(new QueryWrapper<User>().eq("username",username));
 
         if(sex != null) {
@@ -104,6 +110,13 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         }
         if(nickname != null) {
             user.setNickname(nickname);
+        }
+        if(address != null) {
+            String newAddress = addressMapper.getCityById(address);
+            user.setAddress(newAddress);
+        }
+        if(foreignAddress != null) {
+            user.setAddress(foreignAddress);
         }
 
         userMapper.updateUserInfo(user);
