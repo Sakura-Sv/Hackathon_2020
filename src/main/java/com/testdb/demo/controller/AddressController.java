@@ -5,10 +5,9 @@ import com.testdb.demo.utils.AjaxResponseBody;
 import com.testdb.demo.utils.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -23,6 +22,16 @@ public class AddressController {
     @GetMapping("/country")
     public Result<List<String>> getCountry(){
         return Result.success(am.getCountry());
+    }
+
+    @GetMapping("/province")
+    public Result<List<HashMap<String, String>>> getProvince(){
+        return Result.success(am.getProvince());
+    }
+
+    @GetMapping("/city")
+    public Result<List<HashMap<String, String>>> getCity(@RequestParam("pid") String provinceId ){
+        return Result.success(am.getCity(provinceId));
     }
 
 }
