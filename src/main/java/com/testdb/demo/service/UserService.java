@@ -113,7 +113,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         }
         if(address != null) {
             String newAddress = addressMapper.getCityById(address);
-            user.setAddress(newAddress);
+            user.setAddress(newAddress.replace(",", " "));
         }
         if(foreignAddress != null) {
             user.setAddress(foreignAddress);
