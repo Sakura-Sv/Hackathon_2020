@@ -3,6 +3,7 @@ docker rm app
 docker rmi hackathon_2020_app
 git stash
 git pull
+chmod +x appUpdate.sh
 mvn clean
 mvn package
 docker-compose build
