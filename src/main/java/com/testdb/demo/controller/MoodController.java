@@ -20,7 +20,12 @@ public class MoodController {
     @Autowired
     MoodService ms;
 
-    @PostMapping("/add")
+//    @GetMapping
+//    public Result<Void> getMoodList(){
+//
+//    }
+
+    @PostMapping
     public Result<Void> addMood(Principal principal,
                                 @RequestBody Mood mood){
         int status = ms.addMood(mood, principal.getName());
@@ -31,5 +36,7 @@ public class MoodController {
         }
         return Result.success();
     }
+
+
 
 }

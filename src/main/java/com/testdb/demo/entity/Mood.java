@@ -17,6 +17,7 @@ public class Mood {
     private long moodType;
     private String description;
     private LocalDate moodDate;
+    private String dayOfWeek;
     private String userId;
 
 }
