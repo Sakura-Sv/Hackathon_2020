@@ -27,7 +27,7 @@ public class User extends BaseUser implements UserDetails {
      */
 
     @TableId(type = IdType.AUTO)
-    private long id;
+    private String id;
 
     @Email(message = "Username must be a enable Email")
     private String username;

@@ -5,7 +5,7 @@
 <mapper namespace="com.testdb.demo.mapper.UserMapper">
 
     <resultMap id="User" type="com.testdb.demo.entity.User">
-        <id column="id" javaType="int"/>
+        <id column="id" javaType="String"/>
         <result column="username" property="username"/>
         <result column="password" property="password"/>
         <result column="enable" property="enable"/>
