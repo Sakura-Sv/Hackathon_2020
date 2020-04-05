@@ -7,6 +7,8 @@ import com.testdb.demo.entity.QiniuCallbackMessage;
 import com.testdb.demo.entity.User;
 import com.testdb.demo.service.UserService;
 import com.testdb.demo.utils.QiniuUtil;
+import io.lettuce.core.RedisClient;
+import io.lettuce.core.api.StatefulRedisConnection;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,7 @@ public class TestController {
 
     @Autowired
     private UserService us;
+
 
     @GetMapping("/redis")
     public void testRedis() {
