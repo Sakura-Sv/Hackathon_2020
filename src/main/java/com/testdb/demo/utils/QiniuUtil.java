@@ -33,8 +33,8 @@ public class QiniuUtil {
     static String key = null;
     static long expireSeconds = 600L;
 
-    static String callbackUrl = "http://39.107.239.89/api/callback";
-    static String callbackUrlTest = "http://h63gtc.natappfree.cc/api/test/callback";
+    static String callbackUrl = "http://39.107.239.89/api/callback/avatar";
+    static String callbackUrlTest = "http://9fpht5.natappfree.cc/api/callback/avatar";
     static String callbackBodyType = "application/json";
 
 
@@ -77,18 +77,14 @@ public class QiniuUtil {
 
     @SneakyThrows
     public static Boolean validateCallback(HttpServletRequest request,
-                                               byte[] callbackBody
-            ,String suffixPath) {
-        callbackUrl = callbackUrl + suffixPath;
+                                               byte[] callbackBody) {
         String callbackAuthHeader = request.getHeader("Authorization");
-        return auth.isValidCallback(callbackAuthHeader, callbackUrlTest, callbackBody, callbackBodyType);
+        return auth.isValidCallback(callbackAuthHeader, callbackUrl, callbackBody, callbackBodyType);
     }
 
     @SneakyThrows
     public static Boolean validateCallbackTest(HttpServletRequest request,
-                                                           byte[] callbackBody
-                                                           ,String suffixPath) {
-        callbackUrl = callbackUrl + suffixPath;
+                                                           byte[] callbackBody) {
         String callbackAuthHeader = request.getHeader("Authorization");
         return auth.isValidCallback(callbackAuthHeader, callbackUrlTest, callbackBody, callbackBodyType);
     }

@@ -29,6 +29,7 @@ public interface UserMapper extends BaseMapper<User> {
 
     void updateUserInfo(User user);
 
-    @Select("SELECT username, enable, birthday, sex, description, nickname, avatar, address FROM user WHERE username=#{username} ")
+    @Select("SELECT user.username, enable, birthday, sex, description, nickname, avatar.url as avatar, address FROM" +
+            " user LEFT JOIN avatar ON user.username = avatar.username WHERE user.username=#{username} ")
     BaseUser selectUserBaseInfo(@Param("username") String username);
 }

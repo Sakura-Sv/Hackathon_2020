@@ -59,7 +59,7 @@ public class TestController {
         request.getInputStream().read(callbackBody);
         QiniuCallbackMessage message = JSON.parseObject(callbackBody, QiniuCallbackMessage.class);
         String username = message.getUsername();
-        if(QiniuUtil.validateCallback(request, callbackBody, username)){
+        if(QiniuUtil.validateCallback(request, callbackBody)){
             String newUrl = "http://q81okm9pv.bkt.clouddn.com/avatar/"+username;
             us.update(new UpdateWrapper<User>().eq("username", username)
                     .set("avatar", newUrl));

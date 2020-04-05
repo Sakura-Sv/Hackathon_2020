@@ -41,6 +41,7 @@ public class User extends BaseUser implements UserDetails {
     private String sex;
     private String description;
     private String nickname;
+    @TableField(exist=false)
     private String avatar;
     private String address;
 

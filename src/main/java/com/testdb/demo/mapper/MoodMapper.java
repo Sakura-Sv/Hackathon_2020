@@ -14,6 +14,6 @@ import java.util.Map;
 public interface MoodMapper extends BaseMapper<Mood> {
 
     @Select("SELECT day_of_week, mood_type FROM mood " +
-            "WHERE user_id = #{username} AND mood_date >= #{beginTime}")
+            "WHERE username = #{username} AND mood_date >= #{beginTime}")
     List<Map<String, String>> getWeekMoodList(String username, LocalDate beginTime);
 }

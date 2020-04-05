@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.testdb.demo.entity.QiniuCallbackMessage;
 import com.testdb.demo.entity.User;
+import com.testdb.demo.service.AvatarService;
 import com.testdb.demo.service.UserService;
 import com.testdb.demo.utils.AjaxResponseBody;
 import com.testdb.demo.utils.QiniuUtil;
@@ -24,12 +25,12 @@ import java.util.Map;
 public class CallbackController {
 
     @Autowired
-    UserService us;
+    AvatarService as;
 
     @PostMapping("/avatar")
     @SneakyThrows
-    public void updateUserAvater(HttpServletRequest request) {
-        us.uploadAvatarCallback(request);
+    public void updateUserAvatar(HttpServletRequest request) {
+        as.uploadAvatarCallback(request);
     }
 
 }

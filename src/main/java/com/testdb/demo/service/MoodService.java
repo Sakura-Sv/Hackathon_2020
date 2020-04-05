@@ -25,7 +25,7 @@ public class MoodService extends ServiceImpl<MoodMapper, Mood> {
 
         // 2 心情描述过长 1 今天已经填写过了 0 成功
         if(moodMapper.selectOne(new QueryWrapper<Mood>()
-                .eq("user_id", username)
+                .eq("username", username)
                 .eq("mood_date", LocalDate.now())
                 .select("id")) != null){
             return 1;
@@ -34,7 +34,7 @@ public class MoodService extends ServiceImpl<MoodMapper, Mood> {
             return 2;
         }
         LocalDate now = LocalDate.now();
-        mood.setUserId(username);
+        mood.setUsername(username);
         mood.setMoodDate(now);
         mood.setDayOfWeek(now.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH));
         moodMapper.insert(mood);
@@ -73,4 +73,7 @@ public class MoodService extends ServiceImpl<MoodMapper, Mood> {
         return list;
     }
 
+//    public List<Mood> getRandomMood() {
+//        moodMapper.selectList(new QueryWrapper<Mood>().select("mood_type", "description"))
+//    }
 }

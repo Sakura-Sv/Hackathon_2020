@@ -36,6 +36,9 @@ public class MoodController {
         return Result.success();
     }
 
-
+//    @GetMapping("/others")
+//    public Result<Void> getRandomMood(@RequestParam("moodType") String moodType){
+//        return Result.success(ms.getRandomMood());
+//    }
 
 }

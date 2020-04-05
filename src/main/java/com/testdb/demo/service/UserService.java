@@ -6,10 +6,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qiniu.util.StringMap;
+import com.testdb.demo.entity.Avatar;
 import com.testdb.demo.entity.BaseUser;
 import com.testdb.demo.entity.QiniuCallbackMessage;
 import com.testdb.demo.entity.User;
 import com.testdb.demo.mapper.AddressMapper;
+import com.testdb.demo.mapper.AvatarMapper;
 import com.testdb.demo.mapper.UserMapper;
 import com.testdb.demo.utils.DateTimeUtil;
 import com.testdb.demo.utils.QiniuUtil;
@@ -35,6 +37,9 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     AddressMapper addressMapper;
 
     @Autowired
+    AvatarMapper avatarMapper;
+
+    @Autowired
     EmailServiceImpl emailServiceImpl;
 
     @Autowired
@@ -42,7 +47,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
     @Transactional
     @SneakyThrows
-    public boolean signUp(User user) {
+    public void signUp(User user) {
         // 加密密码
         String password = passwordEncoder.encode(user.getPassword());
         user.setPassword(password);
@@ -51,9 +56,10 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         user.setEnable(false);
         // 插入
         userMapper.insert(user);
-        sendConfirmMessage(user);
         Integer userId = userMapper.selectIdByUsername(user.getUsername());
-        return userMapper.createUser(userId.toString(),"2");
+        userMapper.createUser(userId.toString(),"2");
+        avatarMapper.insert(new Avatar(user.getUsername()));
+        sendConfirmMessage(user);
     }
 
     @SneakyThrows
@@ -121,44 +127,5 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
         userMapper.updateUserInfo(user);
     }
-
-    @SneakyThrows
-    public void uploadAvatarTest(String username){
-        StringMap policy = new StringMap();
-        policy.put("callbackUrl", "http://h63gtc.natappfree.cc/api/test/callback");
-        policy.put("callbackBody",
-                "{\"username\":" + "\""+username+"\"," + "\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"bucket\":\"$(bucket)\"}");
-        policy.put("callbackBodyType", "application/json");
-        String sourceUrl = "D:\\OneDrive\\桌面\\23333.jpg";
-        String targetUrl = "avatar/" + username;
-        String token = QiniuUtil.getTokenWithPolicy(targetUrl, policy);
-        QiniuUtil.uploadTest(sourceUrl, targetUrl, token);
-    }
-
-    @SneakyThrows
-    public String uploadAvatar(String username){
-        StringMap policy = new StringMap();
-        policy.put("callbackUrl", "http://39.107.239.89/api/callback/avatar");
-        policy.put("callbackBody",
-                "{\"username\":" + "\""+username+"\"," + "\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"bucket\":\"$(bucket)\"}");
-        policy.put("callbackBodyType", "application/json");
-        String targetUrl = "avatar/" + username;
-        String token = QiniuUtil.getTokenWithPolicy(targetUrl, policy);
-        return token;
-    }
-
-    @SneakyThrows
-    public void uploadAvatarCallback(HttpServletRequest request){
-        byte[] callbackBody = new byte[2048];
-        request.getInputStream().read(callbackBody);
-        QiniuCallbackMessage message = JSON.parseObject(callbackBody, QiniuCallbackMessage.class);
-        String username = message.getUsername();
-        if(QiniuUtil.validateCallback(request, callbackBody, username)){
-            String newUrl = "http://q81okm9pv.bkt.clouddn.com/avatar/"+username;
-            update(new UpdateWrapper<User>().eq("username", username)
-                    .set("avatar", newUrl));
-        }
-    }
-
 
 }
