@@ -14,7 +14,7 @@ public class Mood {
 
     @TableId(type = IdType.AUTO)
     private String id;
-    private long moodType;
+    private int moodType;
     private String description;
     private LocalDate moodDate;
     private String dayOfWeek;

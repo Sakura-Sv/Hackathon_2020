@@ -6,11 +6,10 @@ import com.testdb.demo.utils.AjaxResponseBody;
 import com.testdb.demo.utils.Result;
 import com.testdb.demo.utils.ResultStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.time.LocalDate;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value="/api/mood")
@@ -20,10 +19,10 @@ public class MoodController {
     @Autowired
     MoodService ms;
 
-//    @GetMapping
-//    public Result<Void> getMoodList(){
-//
-//    }
+    @GetMapping
+    public Result<Map<String, Integer>> getMoodList(Principal principal){
+        return Result.success(ms.getMoodList(principal.getName()));
+    }
 
     @PostMapping
     public Result<Void> addMood(Principal principal,
