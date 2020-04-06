@@ -40,7 +40,6 @@ public class MoodController {
 
     @GetMapping("/others")
     public Result<List<BaseMood>> getRandomMood(Principal principal, @RequestParam("moodType") String moodType){
-        System.out.println(principal);
         return Result.success(ms.getRandomMood(principal.getName(),moodType));
     }
 

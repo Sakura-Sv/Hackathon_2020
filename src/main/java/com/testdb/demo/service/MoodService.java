@@ -78,7 +78,16 @@ public class MoodService extends ServiceImpl<MoodMapper, Mood> {
         return list;
     }
 
+    public List<BaseMood> randomize(List<BaseMood> oldList){
+        Random random = new Random(System.currentTimeMillis());
+        List<BaseMood> newList = new ArrayList<>();
+        newList.add(oldList.get(random.nextInt(oldList.size())));
+        newList.add(oldList.get(random.nextInt(oldList.size())));
+        return newList;
+    }
+
     public List<BaseMood> getRandomMood(String username, String userMoodType) {
-        return moodMapper.getOthersMoodList(username, getCurrentDay(),userMoodType);
+        List<BaseMood> oldList = moodMapper.getOthersMoodList(username, getCurrentDay(),userMoodType);
+        return randomize(oldList);
     }
 }
