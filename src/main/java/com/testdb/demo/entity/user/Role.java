@@ -1,4 +1,4 @@
-package com.testdb.demo.entity;
+package com.testdb.demo.entity.user;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;

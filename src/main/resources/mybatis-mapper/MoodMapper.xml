@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.testdb.demo.mapper.MoodMapper">
+
+    <select id="getOthersMoodList" resultType="com.testdb.demo.entity.mood.BaseMood">
+        SELECT mood.username,
+        mood_type,
+        description,
+        avatar.url AS avatar_url
+        FROM mood
+        LEFT JOIN avatar on mood.username = avatar.username
+        WHERE mood_date = #{currentDay} AND  mood.username != #{username}
+        AND mood_type = #{userMoodType}
+        ORDER BY mood_date DESC
+    </select>
+
+
+</mapper>

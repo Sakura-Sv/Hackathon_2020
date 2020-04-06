@@ -1,13 +1,10 @@
 package com.testdb.demo.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.testdb.demo.entity.BaseUser;
-import com.testdb.demo.entity.Role;
-import com.testdb.demo.entity.User;
+import com.testdb.demo.entity.user.BaseUser;
+import com.testdb.demo.entity.user.User;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 @Mapper

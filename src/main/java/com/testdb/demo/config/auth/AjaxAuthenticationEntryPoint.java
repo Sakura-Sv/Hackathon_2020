@@ -1,7 +1,6 @@
 package com.testdb.demo.config.auth;
 
 import com.alibaba.fastjson.JSON;
-import com.testdb.demo.utils.AjaxResponseBody;
 import com.testdb.demo.utils.Result;
 import com.testdb.demo.utils.ResultStatus;
 import lombok.SneakyThrows;

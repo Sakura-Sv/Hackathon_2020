@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qiniu.util.StringMap;
-import com.testdb.demo.entity.Avatar;
+import com.testdb.demo.entity.user.Avatar;
 import com.testdb.demo.entity.QiniuCallbackMessage;
 import com.testdb.demo.mapper.AvatarMapper;
 import com.testdb.demo.utils.QiniuUtil;

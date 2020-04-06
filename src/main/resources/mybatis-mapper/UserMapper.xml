@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.testdb.demo.mapper.UserMapper">
 
-    <resultMap id="User" type="com.testdb.demo.entity.User">
+    <resultMap id="User" type="com.testdb.demo.entity.user.User">
         <id column="id" javaType="String"/>
         <result column="username" property="username"/>
         <result column="password" property="password"/>
@@ -12,7 +12,7 @@
         <collection column="roles" property="roles" javaType="ArrayList" resultMap="Role"/>
     </resultMap>
 
-    <resultMap id="Role" type="com.testdb.demo.entity.Role">
+    <resultMap id="Role" type="com.testdb.demo.entity.user.Role">
         <id column="rid" property="id" javaType="int"/>
         <result column="role_name" property="roleName"/>
         <result column="role_value" property="roleValue"/>

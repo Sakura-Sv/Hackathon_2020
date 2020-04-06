@@ -1,25 +1,20 @@
 package com.testdb.demo.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.testdb.demo.entity.QiniuCallbackMessage;
-import com.testdb.demo.entity.User;
+import com.testdb.demo.entity.user.User;
 import com.testdb.demo.service.UserService;
 import com.testdb.demo.utils.QiniuUtil;
-import io.lettuce.core.RedisClient;
-import io.lettuce.core.api.StatefulRedisConnection;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.concurrent.TimeUnit;
-import java.util.Map;
 
 @RestController
 @RequestMapping(value={("/api/test")})

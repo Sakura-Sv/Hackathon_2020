@@ -1,13 +1,10 @@
 package com.testdb.demo.config.auth;
 
 import com.alibaba.fastjson.JSON;
-import com.testdb.demo.entity.User;
-import com.testdb.demo.service.CustomUserDetailsService;
-import com.testdb.demo.utils.AjaxResponseBody;
+import com.testdb.demo.entity.user.User;
 import com.testdb.demo.utils.JwtTokenUtil;
 import com.testdb.demo.utils.Result;
 import lombok.SneakyThrows;
-import lombok.var;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -15,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -1,13 +1,12 @@
 package com.testdb.demo.service;
 
-import com.testdb.demo.entity.User;
+import com.testdb.demo.entity.user.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 
 import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
 

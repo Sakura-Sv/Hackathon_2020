@@ -2,9 +2,9 @@ package com.testdb.demo.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.testdb.demo.entity.Avatar;
-import com.testdb.demo.entity.BaseUser;
-import com.testdb.demo.entity.User;
+import com.testdb.demo.entity.user.Avatar;
+import com.testdb.demo.entity.user.BaseUser;
+import com.testdb.demo.entity.user.User;
 import com.testdb.demo.service.AvatarService;
 import com.testdb.demo.service.UserService;
 import com.testdb.demo.utils.*;

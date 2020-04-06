@@ -1,7 +1,5 @@
 package com.testdb.demo.config.auth;
 
-
-import com.testdb.demo.config.auth.*;
 import com.testdb.demo.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

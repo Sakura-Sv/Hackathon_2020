@@ -1,6 +1,7 @@
 package com.testdb.demo.controller;
 
-import com.testdb.demo.entity.Mood;
+import com.testdb.demo.entity.mood.BaseMood;
+import com.testdb.demo.entity.mood.Mood;
 import com.testdb.demo.service.MoodService;
 import com.testdb.demo.utils.AjaxResponseBody;
 import com.testdb.demo.utils.Result;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -36,9 +38,10 @@ public class MoodController {
         return Result.success();
     }
 
-//    @GetMapping("/others")
-//    public Result<Void> getRandomMood(@RequestParam("moodType") String moodType){
-//        return Result.success(ms.getRandomMood());
-//    }
+    @GetMapping("/others")
+    public Result<List<BaseMood>> getRandomMood(Principal principal, @RequestParam("moodType") String moodType){
+        System.out.println(principal);
+        return Result.success(ms.getRandomMood(principal.getName(),moodType));
+    }
 
 }

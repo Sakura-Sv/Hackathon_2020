@@ -1,7 +1,6 @@
 package com.testdb.demo.config.auth;
 
 import com.alibaba.fastjson.JSON;
-import com.testdb.demo.utils.AjaxResponseBody;
 import com.testdb.demo.utils.Result;
 import lombok.SneakyThrows;
 import org.springframework.http.MediaType;

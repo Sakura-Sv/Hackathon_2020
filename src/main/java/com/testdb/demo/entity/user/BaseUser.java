@@ -1,4 +1,4 @@
-package com.testdb.demo.entity;
+package com.testdb.demo.entity.user;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

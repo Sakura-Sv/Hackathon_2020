@@ -1,6 +1,5 @@
 package com.testdb.demo.utils;
 
-
 public class WeekUtil {
 
     public static String last(String currentDay){

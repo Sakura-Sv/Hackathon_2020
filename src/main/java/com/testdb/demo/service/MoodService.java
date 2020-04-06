@@ -2,7 +2,8 @@ package com.testdb.demo.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.testdb.demo.entity.Mood;
+import com.testdb.demo.entity.mood.BaseMood;
+import com.testdb.demo.entity.mood.Mood;
 import com.testdb.demo.mapper.MoodMapper;
 import com.testdb.demo.utils.WeekUtil;
 import lombok.SneakyThrows;
@@ -42,12 +43,16 @@ public class MoodService extends ServiceImpl<MoodMapper, Mood> {
     }
 
     @SneakyThrows
-    public String getCurrentDay(){
-        return LocalDate.now()
+    public LocalDate getCurrentDay(){
+        return LocalDate.now();
+    }
+
+    @SneakyThrows
+    public String getCurrentDayOfWeek(){
+        return getCurrentDay()
                 .getDayOfWeek()
                 .getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
     }
-
 
     @SneakyThrows
     public Map<String, Integer> getMoodList(String username){
@@ -63,7 +68,7 @@ public class MoodService extends ServiceImpl<MoodMapper, Mood> {
     @SneakyThrows
     public Map<String, Integer> createWeekMoodList(){
         Map<String, Integer> list = new LinkedHashMap<>();
-        String currentDay = getCurrentDay();
+        String currentDay = getCurrentDayOfWeek();
         list.put(currentDay, 0);
         for(int i=0;i<6;++i){
             String lastDay = WeekUtil.last(currentDay);
@@ -73,7 +78,7 @@ public class MoodService extends ServiceImpl<MoodMapper, Mood> {
         return list;
     }
 
-//    public List<Mood> getRandomMood() {
-//        moodMapper.selectList(new QueryWrapper<Mood>().select("mood_type", "description"))
-//    }
+    public List<BaseMood> getRandomMood(String username, String userMoodType) {
+        return moodMapper.getOthersMoodList(username, getCurrentDay(),userMoodType);
+    }
 }

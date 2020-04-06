@@ -1,20 +1,15 @@
 package com.testdb.demo.service;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.qiniu.util.StringMap;
-import com.testdb.demo.entity.Avatar;
-import com.testdb.demo.entity.BaseUser;
-import com.testdb.demo.entity.QiniuCallbackMessage;
-import com.testdb.demo.entity.User;
+import com.testdb.demo.entity.user.Avatar;
+import com.testdb.demo.entity.user.BaseUser;
+import com.testdb.demo.entity.user.User;
 import com.testdb.demo.mapper.AddressMapper;
 import com.testdb.demo.mapper.AvatarMapper;
 import com.testdb.demo.mapper.UserMapper;
 import com.testdb.demo.utils.DateTimeUtil;
-import com.testdb.demo.utils.QiniuUtil;
 import com.testdb.demo.utils.UuidMaker;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Date;
