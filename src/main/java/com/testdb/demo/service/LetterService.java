@@ -1,6 +1,8 @@
 package com.testdb.demo.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.testdb.demo.entity.letter.Comment;
 import com.testdb.demo.entity.letter.Letter;
 import com.testdb.demo.mapper.LetterMapper;
 import lombok.SneakyThrows;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Service
@@ -28,7 +31,5 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
         letter.setCreateTime(LocalDate.now());
         this.save(letter);
     }
-
-
 
 }

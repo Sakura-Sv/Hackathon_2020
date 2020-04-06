@@ -14,7 +14,7 @@ public class Comment {
 
     @TableId(type = IdType.AUTO)
     private long id;
-    private String username;
+    private String commenterName;
     private String commentText;
     private LocalDateTime commentTime;
     private long letterId;
