@@ -97,7 +97,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         String nickname = jsonParam.getString("nickname");
         String address = jsonParam.getString("address");
         String foreignAddress = jsonParam.getString("foreignAddress");
-        User user = getOne(new QueryWrapper<User>().eq("username",username));
+        User user = this.getOne(new QueryWrapper<User>().eq("username",username));
 
         if(sex != null) {
             user.setSex(sex);

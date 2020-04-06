@@ -49,7 +49,7 @@ public class AvatarService extends ServiceImpl<AvatarMapper, Avatar> {
         String username = message.getUsername();
         if(QiniuUtil.validateCallback(request, callbackBody)){
             String newUrl = "http://q81okm9pv.bkt.clouddn.com/avatar/"+username;
-            update(new UpdateWrapper<Avatar>().eq("username", username)
+            this.update(new UpdateWrapper<Avatar>().eq("username", username)
                     .set("url", newUrl));
         }
     }
