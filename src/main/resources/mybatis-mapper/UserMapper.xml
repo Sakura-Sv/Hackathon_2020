@@ -9,6 +9,7 @@
         <result column="username" property="username"/>
         <result column="password" property="password"/>
         <result column="enable" property="enable"/>
+        <result column="nickname" property="nickname"/>
         <collection column="roles" property="roles" javaType="ArrayList" resultMap="Role"/>
     </resultMap>
 
@@ -32,7 +33,7 @@
 
     <select id="selectUserAndRoles" resultMap="User">
         SELECT
-        u.id, username, password, enable, r.id as rid, role_name, role_value
+        u.id, username, password, enable, nickname, r.id as rid, role_name, role_value
         FROM user u
         LEFT JOIN user_role ur ON u.id = ur.user_id
         LEFT JOIN urole r on ur.role_id = r.id
