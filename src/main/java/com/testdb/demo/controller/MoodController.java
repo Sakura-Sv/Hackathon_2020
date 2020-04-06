@@ -40,7 +40,11 @@ public class MoodController {
 
     @GetMapping("/others")
     public Result<List<BaseMood>> getRandomMood(Principal principal, @RequestParam("moodType") String moodType){
-        return Result.success(ms.getRandomMood(principal.getName(),moodType));
+        List<BaseMood> results =ms.getRandomMood(principal.getName(),moodType);
+        if(results == null) {
+            return Result.failure(ResultStatus.FAILURE.setMessage("今天还没有小伙伴儿发布类似的心情喔！"));
+        }
+        return Result.success(results);
     }
 
 }

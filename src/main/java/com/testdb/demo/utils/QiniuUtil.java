@@ -53,6 +53,13 @@ public class QiniuUtil {
     }
 
     @SneakyThrows
+    public static String getRandomKeyToken() {
+        key = UuidMaker.getUuid();
+        System.out.println(key);
+        return auth.uploadToken(bucketName, key);
+    }
+
+    @SneakyThrows
     public static String getTokenWithPolicy(String uploadPath, StringMap putPolicy){
         key = uploadPath;
         return auth.uploadToken(bucketName, key, expireSeconds, putPolicy);

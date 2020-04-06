@@ -32,6 +32,11 @@ public class TestController {
     @Autowired
     private UserService us;
 
+    @GetMapping
+    public String test(){
+        return QiniuUtil.getRandomKeyToken();
+    }
+
 
     @GetMapping("/redis")
     public void testRedis() {

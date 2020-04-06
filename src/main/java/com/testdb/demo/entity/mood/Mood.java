@@ -19,7 +19,6 @@ public class Mood {
     private LocalDate moodDate;
     private String dayOfWeek;
     private String username;
-
-
+    private Boolean isPublic;
 
 }

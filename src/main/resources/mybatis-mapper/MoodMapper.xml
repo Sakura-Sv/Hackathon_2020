@@ -12,7 +12,7 @@
         FROM mood
         LEFT JOIN avatar on mood.username = avatar.username
         WHERE mood_date = #{currentDay} AND  mood.username != #{username}
-        AND mood_type = #{userMoodType}
+        AND is_public = 1 AND mood_type = #{userMoodType}
         ORDER BY mood_date DESC
         LIMIT 20
     </select>

@@ -1,4 +1,4 @@
-package com.testdb.demo.config;
+package com.testdb.demo.config.mybatis;
 
 import com.baomidou.mybatisplus.core.parser.ISqlParser;
 import com.baomidou.mybatisplus.extension.parsers.BlockAttackSqlParser;
@@ -17,6 +17,7 @@ public class MybatisPlusConfig {
     /**
      * 分页插件
      */
+
     @Bean
     public PaginationInterceptor paginationInterceptor() {
         PaginationInterceptor paginationInterceptor = new PaginationInterceptor();
