@@ -13,8 +13,8 @@ import java.time.LocalDate;
 public class Mood {
 
     @TableId(type = IdType.AUTO)
-    private String id;
-    private int moodType;
+    private int id;
+    private String moodType;
     private String description;
     private LocalDate moodDate;
     private String dayOfWeek;
