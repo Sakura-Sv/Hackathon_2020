@@ -1,12 +1,16 @@
 package com.testdb.demo.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.testdb.demo.entity.letter.BaseLetter;
 import com.testdb.demo.entity.letter.Letter;
+import com.testdb.demo.entity.user.User;
 import com.testdb.demo.service.BaseLetterService;
 import com.testdb.demo.service.LetterService;
+import com.testdb.demo.service.UserService;
 import com.testdb.demo.utils.AjaxResponseBody;
 import com.testdb.demo.utils.Result;
+import com.testdb.demo.utils.ResultStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +23,9 @@ public class LetterController {
 
     @Autowired
     LetterService ls;
+
+    @Autowired
+    UserService us;
 
     @Autowired
     BaseLetterService bls;
@@ -35,13 +42,17 @@ public class LetterController {
     }
 
     @GetMapping("/preview")
-    public Result<Page<BaseLetter>> getLetterList(Principal principal, @RequestParam("index") int index){
+    public Result<Page<BaseLetter>> getLetterList(Principal principal,
+                                                  @RequestParam(value = "index", defaultValue = "1") int index){
         return Result.success(bls.getBaseLetterList(principal.getName(), index));
     }
 
     @GetMapping("/others")
-    public Result<Page<BaseLetter>> getOthersLetterList(@RequestParam("index") int index,
+    public Result<Page<BaseLetter>> getOthersLetterList(@RequestParam(value = "index", defaultValue = "1") int index,
                                                         @RequestParam("username") String username){
+        if(us.checkUnValidUser(username)){
+            return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("不存在此用户！"));
+        }
         return Result.success(bls.getBaseLetterList(username, index));
     }
 
