@@ -28,7 +28,7 @@ public class CommentController {
     @GetMapping
     public Result<Page<Comment>> getCommentList(@RequestParam(value = "index", defaultValue = "1") int index,
                                                 @RequestParam long motherId,
-                                                @RequestParam int level){
+                                                @RequestParam(value = "level", defaultValue = "1") int level){
         if(ls.checkInvalidLetterId(motherId)){
             return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("不存在这封信！"));
         }
