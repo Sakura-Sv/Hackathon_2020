@@ -5,18 +5,20 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.testdb.demo.entity.letter.Comment;
 import com.testdb.demo.entity.letter.Letter;
+import com.testdb.demo.entity.user.Message;
 import com.testdb.demo.mapper.CommentMapper;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class CommentService extends ServiceImpl<CommentMapper, Comment> {
 
     @Autowired
-    private CommentMapper commentMapper;
+    private MessageService messageService;
 
     @SneakyThrows
     public Boolean checkInvalidCommentId(long commentId){
@@ -27,6 +29,19 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
     public Page<Comment> getCommentList( int index, long motherId, int level){
         Page<Comment> page = new Page<>(index, 20);
         return page.setRecords(this.baseMapper.getCommentList(motherId, level, page));
+    }
+
+    @SneakyThrows
+    public void postComment(String username, Comment comment){
+        LocalDateTime postTime = LocalDateTime.now();
+        comment.setCommentTime(postTime);
+        comment.setCommenterName(username);
+        this.save(comment);
+        messageService.sendMessage(username,
+                comment.getCommenterName(),
+                comment.getCommentTime(),
+                comment.getLevel(),
+                comment.getMotherId());
     }
 
 }
