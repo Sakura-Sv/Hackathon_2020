@@ -1,8 +1,5 @@
-package com.testdb.demo.entity.letter;
+package com.testdb.demo.entity.user;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -14,17 +11,16 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class Comment {
+public class ConfirmCode {
 
-    @TableId(type = IdType.AUTO)
-    private long id;
-    private String commenterName;
-    private String commentText;
+    private String confirmCode;
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
-    private LocalDateTime commentTime;
-    private long letterId;
-    @TableField(exist = false)
-    private String avatarUrl;
+    private LocalDateTime createTime;
+
+    public ConfirmCode(String confirmCode, LocalDateTime createTime){
+        this.confirmCode = confirmCode;
+        this.createTime = createTime;
+    }
 
 }

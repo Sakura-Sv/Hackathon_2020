@@ -21,7 +21,7 @@ import java.util.*;
 public class MoodService extends ServiceImpl<MoodMapper, Mood> {
 
     @Autowired
-    MoodMapper moodMapper;
+    private MoodMapper moodMapper;
 
     @SneakyThrows
     public int addMood(Mood mood, String username){

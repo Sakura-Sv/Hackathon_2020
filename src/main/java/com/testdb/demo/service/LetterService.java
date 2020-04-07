@@ -27,7 +27,15 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
     @SneakyThrows
     public void postLetter(String username, Letter letter){
         letter.setAuthor(username);
-        letter.setPreview(letter.getContent().substring(0,40)+"...");
+
+        int length = letter.getContent().length();
+        if(length > 40) {
+            letter.setPreview(letter.getContent().substring(0, 40) + "...");
+        }
+        else {
+            letter.setPreview(letter.getContent());
+        }
+
         letter.setCreateTime(LocalDate.now());
         this.save(letter);
     }

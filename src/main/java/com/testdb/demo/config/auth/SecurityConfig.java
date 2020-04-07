@@ -58,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .mvcMatchers("/api/user/signup", "/api/callback/**",
                         "/api/test/**", "/api/user/signin", "/api/user/confirm/**",
-                        "/api/address/**")
+                        "/api/address/**", "/api/user/forget")
                 .permitAll()
 
                 .and()

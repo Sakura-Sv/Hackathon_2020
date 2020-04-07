@@ -12,6 +12,8 @@ import java.util.Set;
 
 @Component("RbacAuthorityService")
 public class RbacAuthorityService {
+
+    @SuppressWarnings("unchecked")
     public boolean hasPermission(HttpServletRequest request, Authentication authentication) {
 
         Object userInfo = authentication.getPrincipal();
@@ -23,14 +25,14 @@ public class RbacAuthorityService {
             User user = (User)userInfo;
             user.setPassword(null);
 
-            //禁用未认证账户
+            // 禁用未认证账户
             if(!user.isEnabled()){ return false; }
+            // 拦截密码更新用户
+            if(user.getBeRefresh()) {return false;}
 
             //获取资源
             Set<String> urls = new HashSet();
             urls.add("/**"); // 这些 url 都是要登录后才能访问，且其他的 url 都不能访问！
-            Set set2 = new HashSet();
-            Set set3 = new HashSet();
 
             AntPathMatcher antPathMatcher = new AntPathMatcher();
             System.out.println(authentication);

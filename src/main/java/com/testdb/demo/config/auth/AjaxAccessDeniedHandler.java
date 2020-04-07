@@ -22,8 +22,8 @@ public class AjaxAccessDeniedHandler implements AccessDeniedHandler {
                        AccessDeniedException e){
 
         httpServletResponse.setHeader("Content-Type", MediaType.APPLICATION_JSON.toString());
-        httpServletResponse.getWriter().write(JSON.toJSONString(Result.failure(ResultStatus.FORBIDDEN)));
-
+        httpServletResponse.getWriter().write(JSON.toJSONString(Result.failure(ResultStatus.FORBIDDEN
+        .setMessage("您的权限不够或者您的密码已被修改"))));
     }
 
 }

@@ -52,13 +52,11 @@ public class UserController {
     @GetMapping("/confirm")
     public Result<Void> confirmUser(@RequestParam String confirmCode){
         int status = us.confirmUser(confirmCode);
-        if(status == 2){
-            return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("该验证码已过期！"));
+        switch(status){
+            case 2: return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("该验证码已过期！"));
+            case 1: return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("该账号已被激活！"));
+            default: return Result.success();
         }
-        else if(status == 1){
-            return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("该账号已被激活！"));
-        }
-        return Result.success();
     }
 
     @GetMapping(value = "/info")
@@ -85,8 +83,40 @@ public class UserController {
 
     @PostMapping("/avatar")
     public Result<String> getAvatarToken(Principal principal){
-         String token = as.uploadAvatar(principal.getName());
+        String token = as.uploadAvatar(principal.getName());
         return Result.success(token);
+    }
+
+    @GetMapping("/forget")
+    public Result<Void> getConfirmCode(Principal principal){
+        us.getConfirmCode(principal.getName());
+        return Result.success();
+    }
+
+    @PostMapping("/forget")
+    public Result<Void> findPassword(Principal principal,
+                                     @RequestBody JSONObject jsonParam){
+        int wrongConfirmCode = us.findPassword(principal.getName(),
+                jsonParam.getString("newPassword"),
+                jsonParam.getString("confirmCode"));
+        switch(wrongConfirmCode){
+            case 3: return Result.failure(ResultStatus.FAILURE.setMessage("请先发起找回密码请求！"));
+            case 2: return Result.failure(ResultStatus.FAILURE.setMessage("验证码已过期！"));
+            case 1: return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("验证码错误！"));
+            default: return Result.success();
+        }
+    }
+
+    @PostMapping("/password")
+    public Result<Void> changPassword(Principal principal,
+                                      @RequestBody JSONObject jsonParam){
+        Boolean wrongPassword = us.changePassword(principal.getName(),
+                jsonParam.getString("oldPassword"),
+                jsonParam.getString("newPassword"));
+        if(wrongPassword){
+            return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("密码错误！"));
+        }
+        return Result.success();
     }
 
 }

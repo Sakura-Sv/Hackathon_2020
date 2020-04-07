@@ -14,7 +14,7 @@ import java.util.List;
 public class CommentService extends ServiceImpl<CommentMapper, Comment> {
 
     @Autowired
-    CommentMapper commentMapper;
+    private CommentMapper commentMapper;
 
     @SneakyThrows
     public Page<Comment> getCommentList( int index, long letterId){

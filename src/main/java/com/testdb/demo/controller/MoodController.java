@@ -31,12 +31,11 @@ public class MoodController {
     public Result<Void> addMood(Principal principal,
                                 @RequestBody Mood mood){
         int status = ms.addMood(mood, principal.getName());
-        if(status == 1){
-            return Result.failure(ResultStatus.FAILURE.setMessage("今天已经记录过心情啦！"));
-        }else if(status == 2){
-            return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("你的一句话太长啦！"));
+        switch(status){
+            case 2: return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("你的一句话太长啦！"));
+            case 1: return Result.failure(ResultStatus.FAILURE.setMessage("今天已经记录过心情啦！"));
+            default: return Result.success();
         }
-        return Result.success();
     }
 
     @GetMapping("/others")

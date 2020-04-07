@@ -16,10 +16,10 @@ import java.io.File;
 public class EmailServiceImpl implements EmailService {
 
     @Autowired
-    JavaMailSender javaMailSender;
+    private JavaMailSender javaMailSender;
 
     @Value("${spring.mail.from}")
-    String from;
+    private String from;
 
     @Override
     @Async
