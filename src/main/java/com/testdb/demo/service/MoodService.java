@@ -1,9 +1,11 @@
 package com.testdb.demo.service;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.testdb.demo.entity.mood.BaseMood;
 import com.testdb.demo.entity.mood.Mood;
+import com.testdb.demo.entity.mood.WeekMood;
 import com.testdb.demo.mapper.MoodMapper;
 import com.testdb.demo.utils.WeekUtil;
 import lombok.SneakyThrows;
@@ -31,9 +33,18 @@ public class MoodService extends ServiceImpl<MoodMapper, Mood> {
                 .select("id")) != null){
             return 1;
         }
-        if(mood.getDescription().length() > 80) {
+
+        int length = mood.getDescription().length();
+        if(length > 80) {
             return 2;
         }
+        else if(length > 20){
+            mood.setPreview(mood.getDescription().substring(0,18)+"...");
+        }
+        else {
+            mood.setPreview(mood.getDescription());
+        }
+
         LocalDate now = LocalDate.now();
         mood.setUsername(username);
         mood.setMoodDate(now);
@@ -55,24 +66,25 @@ public class MoodService extends ServiceImpl<MoodMapper, Mood> {
     }
 
     @SneakyThrows
-    public Map<String, Integer> getMoodList(String username){
+    public Map<String, WeekMood> getMoodList(String username){
         LocalDate beginTime = LocalDate.now().minusDays(6);
-        List<Map<String, String>> oldList = moodMapper.getWeekMoodList(username, beginTime);
-        Map<String, Integer> newList = createWeekMoodList();
-        for(Map<String, String> day: oldList){
-            newList.put(day.get("day_of_week"), Integer.parseInt(day.get("mood_type")));
+        List<Map<String, Object>> oldList = this.listMaps(new QueryWrapper<Mood>().select("day_of_week", "mood_type","preview"));
+        System.out.println(oldList);
+        Map<String, WeekMood> newList = createWeekMoodList();
+        for(Map<String, Object> day: oldList){
+            newList.put((String)day.get("day_of_week"), new WeekMood((String)day.get("mood_type"), (String)day.get("preview")));
         }
         return newList;
     }
 
     @SneakyThrows
-    public Map<String, Integer> createWeekMoodList(){
-        Map<String, Integer> list = new LinkedHashMap<>();
+    public Map<String, WeekMood> createWeekMoodList(){
+        Map<String, WeekMood> list = new LinkedHashMap<>();
         String currentDay = getCurrentDayOfWeek();
-        list.put(currentDay, 0);
+        list.put(currentDay, new WeekMood("0","这天没有发布心情哦"));
         for(int i=0;i<6;++i){
             String lastDay = WeekUtil.last(currentDay);
-            list.put(lastDay, 0);
+            list.put(lastDay, new WeekMood("0","这天没有发布心情哦"));
             currentDay = lastDay;
         }
         return list;

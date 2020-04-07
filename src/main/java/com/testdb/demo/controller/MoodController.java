@@ -2,6 +2,7 @@ package com.testdb.demo.controller;
 
 import com.testdb.demo.entity.mood.BaseMood;
 import com.testdb.demo.entity.mood.Mood;
+import com.testdb.demo.entity.mood.WeekMood;
 import com.testdb.demo.service.MoodService;
 import com.testdb.demo.utils.AjaxResponseBody;
 import com.testdb.demo.utils.Result;
@@ -22,7 +23,7 @@ public class MoodController {
     MoodService ms;
 
     @GetMapping
-    public Result<Map<String, Integer>> getMoodList(Principal principal){
+    public Result<Map<String, WeekMood>> getMoodList(Principal principal){
         return Result.success(ms.getMoodList(principal.getName()));
     }
 
