@@ -88,15 +88,14 @@ public class UserController {
     }
 
     @GetMapping("/forget")
-    public Result<Void> getConfirmCode(Principal principal){
-        us.getConfirmCode(principal.getName());
+    public Result<Void> getConfirmCode(@RequestParam String username){
+        us.getConfirmCode(username);
         return Result.success();
     }
 
     @PostMapping("/forget")
-    public Result<Void> findPassword(Principal principal,
-                                     @RequestBody JSONObject jsonParam){
-        int wrongConfirmCode = us.findPassword(principal.getName(),
+    public Result<Void> findPassword(@RequestBody JSONObject jsonParam){
+        int wrongConfirmCode = us.findPassword(jsonParam.getString("username"),
                 jsonParam.getString("newPassword"),
                 jsonParam.getString("confirmCode"));
         switch(wrongConfirmCode){
