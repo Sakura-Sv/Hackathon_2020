@@ -9,7 +9,7 @@
         avatar.url AS avatarUrl
         FROM comment
         LEFT JOIN avatar ON commenter_name = avatar.username
-        WHERE letter_id = #{letterId}
+        WHERE level = #{level} And mother_id = #{motherId}
         ORDER BY comment_time ASC
     </select>
 

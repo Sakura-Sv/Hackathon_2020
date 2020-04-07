@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface CommentMapper extends BaseMapper<Comment> {
 
-    List<Comment> getCommentList(long letterId, Page<Comment> pagination);
+    List<Comment> getCommentList(long motherId, int level, Page<Comment> pagination);
 
 }

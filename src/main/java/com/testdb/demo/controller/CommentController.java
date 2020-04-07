@@ -8,11 +8,11 @@ import com.testdb.demo.utils.AjaxResponseBody;
 import com.testdb.demo.utils.Result;
 import com.testdb.demo.utils.ResultStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/comment")
@@ -27,17 +27,21 @@ public class CommentController {
 
     @GetMapping
     public Result<Page<Comment>> getCommentList(@RequestParam(value = "index", defaultValue = "1") int index,
-                                                @RequestParam long letterId){
-        if(ls.checkInvalidLetterId(letterId)){
+                                                @RequestParam long motherId,
+                                                @RequestParam int level){
+        if(ls.checkInvalidLetterId(motherId)){
             return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("不存在这封信！"));
         }
-        return Result.success(cs.getCommentList(index, letterId));
+        else if(cs.checkInvalidCommentId(motherId)){
+            return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("不存在这条评论！"));
+        }
+        return Result.success(cs.getCommentList(index, motherId, level));
     }
 
     @PostMapping
     public Result<Void> postComment(Principal principal, @RequestBody Comment comment){
 
-        if(ls.checkInvalidLetterId(comment.getLetterId())){
+        if(ls.checkInvalidLetterId(comment.getMotherId())){
             return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("不存在这封信！"));
         }
 

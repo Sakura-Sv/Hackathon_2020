@@ -10,6 +10,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 @Data
@@ -23,7 +24,9 @@ public class Comment {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime commentTime;
-    private long letterId;
+    private long motherId;
+    @Size(min=1, max=2)
+    private int level;
     @TableField(exist = false)
     private String avatarUrl;
 
