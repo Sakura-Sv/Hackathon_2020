@@ -9,6 +9,7 @@ import com.testdb.demo.service.BaseLetterService;
 import com.testdb.demo.service.LetterService;
 import com.testdb.demo.service.UserService;
 import com.testdb.demo.utils.AjaxResponseBody;
+import com.testdb.demo.utils.QiniuUtil;
 import com.testdb.demo.utils.Result;
 import com.testdb.demo.utils.ResultStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,10 +51,15 @@ public class LetterController {
     @GetMapping("/others")
     public Result<Page<BaseLetter>> getOthersLetterList(@RequestParam(value = "index", defaultValue = "1") int index,
                                                         @RequestParam("username") String username){
-        if(us.checkUnValidUser(username)){
+        if(us.checkInvalidUser(username)){
             return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("不存在此用户！"));
         }
         return Result.success(bls.getBaseLetterList(username, index));
+    }
+
+    @GetMapping("/annex")
+    public Result<String> getAnnexUploadToken(){
+        return Result.success(QiniuUtil.getRandomKeyToken());
     }
 
 }

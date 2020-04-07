@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.testdb.demo.entity.letter.Comment;
 import com.testdb.demo.entity.letter.Letter;
 import com.testdb.demo.mapper.LetterMapper;
+import com.testdb.demo.utils.QiniuUtil;
+import com.testdb.demo.utils.UuidMaker;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,11 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
     @SneakyThrows
     public Letter getLetter(String id){
         return this.getById(id);
+    }
+    
+    @SneakyThrows
+    public Boolean checkInvalidLetterId(long letterId){
+        return this.getOne(new QueryWrapper<Letter>().select("id").eq("id", letterId)) == null;
     }
 
     @SneakyThrows

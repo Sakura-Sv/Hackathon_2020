@@ -63,14 +63,14 @@ public class UserController {
     @SneakyThrows
     public Result<BaseUser> getUserInfo(Principal principal,
                                         @RequestParam(value="username", required = false) String username){
-        BaseUser user = null;
+        BaseUser user;
         if(username == null) {
             user = us.getBaseInfo(principal.getName());
         }
         else{
             user = us.getBaseInfo(username);
             if(user == null){
-                return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("没有该用户！"));
+                return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("不存在该用户！"));
             }
         }
         return Result.success(user);

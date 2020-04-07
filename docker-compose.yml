@@ -11,6 +11,8 @@ services:
       - ./nginx/conf.d:/etc/nginx/conf.d
     depends_on:
       - app
+    networks:
+      - backend
 
   redis:
     container_name: lz-redis
@@ -23,6 +25,8 @@ services:
     volumes:
       - /var/www/hackathon/redis:/data/
     restart: unless-stopped
+    networks:
+      - backend
 
   mysql:
     container_name: lz-mysql
@@ -37,6 +41,8 @@ services:
     ports:
       - 3306:3306
     restart: unless-stopped
+    networks:
+      - backend
 
   app:
     container_name: app
@@ -45,10 +51,15 @@ services:
       dockerfile: Dockerfile
     restart: always
     volumes:
-      - ./log/:/app/log/
+      - ./log/:/log
       - .:/app
     ports:
       - 8080:8080
     depends_on:
       - mysql
       - redis
+    networks:
+      - backend
+
+networks:
+  backend:
