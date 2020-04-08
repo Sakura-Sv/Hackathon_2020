@@ -8,7 +8,7 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
+      - $PWD/nginx/conf.d:/etc/nginx/conf.d
     depends_on:
       - app
     networks:
@@ -23,6 +23,7 @@ services:
     ports:
       - 6379:6379
     volumes:
+      - $PWD/redis.conf:/usr/local/etc/redis/redis.conf
       - /var/www/hackathon/redis:/data/
     restart: unless-stopped
     networks:
@@ -51,8 +52,8 @@ services:
       dockerfile: Dockerfile
     restart: always
     volumes:
-      - ./log/:/log
-      - .:/app
+      - $PWD/log/:/log
+      - $PWD:/app
     ports:
       - 8080:8080
     depends_on:
