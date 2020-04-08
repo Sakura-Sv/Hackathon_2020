@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class Comment {
+public class Reply  {
 
     @TableId(type = IdType.AUTO)
     private Long id;
@@ -25,8 +25,13 @@ public class Comment {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime commentTime;
-    private Long aid;
+    private String targetUsername;
+    private String targetNickname;
+    private Long commentId;
+    private Long pid;
     @TableField(exist = false)
     private String avatarUrl;
+    @TableField(exist = false)
+    private String targetAvatarUrl;
 
 }

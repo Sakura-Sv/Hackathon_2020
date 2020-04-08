@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @TableName("letter")
 public class BaseLetter  {
 
-    private long id;
+    private Long id;
     private String preview;
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)

@@ -3,6 +3,7 @@ package com.testdb.demo.controller;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.testdb.demo.entity.QiniuCallbackMessage;
+import com.testdb.demo.entity.user.BaseUser;
 import com.testdb.demo.entity.user.User;
 import com.testdb.demo.service.UserService;
 import com.testdb.demo.utils.QiniuUtil;
@@ -11,6 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,12 +51,10 @@ public class TestController {
     }
 
     @GetMapping("/url")
-    public String getUrl(Principal principal) {
-        System.out.println(principal);
-        String fileName = "test1.jpg";
-        String domainOfBucket = "http://devtools.qiniu.com";
-        String finalUrl = String.format("%s/%s", domainOfBucket, fileName);
-        return finalUrl;
+    public String getUrl(Authentication principal) {
+        System.out.println(principal.getPrincipal());
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        return null;
     }
 
     @SneakyThrows

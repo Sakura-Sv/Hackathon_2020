@@ -2,19 +2,15 @@ package com.testdb.demo.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.testdb.demo.entity.letter.Comment;
 import com.testdb.demo.entity.letter.Letter;
 import com.testdb.demo.entity.user.BaseUser;
 import com.testdb.demo.mapper.LetterMapper;
-import com.testdb.demo.utils.QiniuUtil;
-import com.testdb.demo.utils.UuidMaker;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
 import java.time.LocalDate;
-import java.util.List;
 
 
 @Service
@@ -27,15 +23,15 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
     public Letter getLetter(String id){
         return this.getById(id);
     }
-    
+
     @SneakyThrows
     public Boolean checkInvalidLetterId(long letterId){
         return this.getOne(new QueryWrapper<Letter>().select("id").eq("id", letterId)) == null;
     }
 
     @SneakyThrows
-    public void postLetter(Principal principal, Letter letter){
-        BaseUser user = UserService.p2B(principal);
+    public void postLetter(Authentication token, Letter letter){
+        BaseUser user = UserService.t2b(token);
         letter.setAuthor(user.getUsername());
         letter.setNickname(user.getNickname());
 

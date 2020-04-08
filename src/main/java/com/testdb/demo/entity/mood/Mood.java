@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class Mood {
 
     @TableId(type = IdType.AUTO)
-    private int id;
+    private Long id;
     private String moodType;
     private String preview;
     private String description;

@@ -17,11 +17,11 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Principal;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -212,7 +212,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     }
 
     @SneakyThrows
-    public static BaseUser p2B(Principal principal){
-        return (BaseUser)principal;
+    public static BaseUser t2b(Authentication token){
+        return (BaseUser)token.getPrincipal();
     }
 }

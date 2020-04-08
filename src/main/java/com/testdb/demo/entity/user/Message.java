@@ -19,7 +19,10 @@ public class Message {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createTime;
     private String content;
-    // 0 点赞 1 评论信 2 评论评论 3 对回信的感谢
+    /**
+     *  level由两位数组成表示    第一位1/2 表示幸运信/解忧信
+     *                        第二位0/1/2/3 表示点赞/评论/楼中楼
+     */
     private int level;
     private long motherId;
 

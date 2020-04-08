@@ -16,7 +16,7 @@ import java.time.LocalDate;
 public class Letter extends BaseLetter {
 
     @TableId(type = IdType.AUTO)
-    private long id;
+    private Long id;
     private String letterType;
     private String author;
     private String nickname;
@@ -26,8 +26,8 @@ public class Letter extends BaseLetter {
     private String preview;
     private String content;
     private String annexUrl;
-    private long starCount;
+    private Long starCount;
     private String targetUsername;
-    private long commentCount;
+    private Long commentCount;
 
 }

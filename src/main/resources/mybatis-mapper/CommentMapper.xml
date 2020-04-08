@@ -4,13 +4,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.testdb.demo.mapper.CommentMapper">
 
-    <select id="getCommentList" resultType="com.testdb.demo.entity.letter.Comment">
-        SELECT commenter_name, nickname, comment_text, comment_time,
-        avatar.url AS avatarUrl
-        FROM comment
-        LEFT JOIN avatar ON commenter_name = avatar.username
-        WHERE level = #{level} And mother_id = #{motherId}
-        ORDER BY comment_time ASC
-    </select>
+<!--    <select id="getCommentList" resultType="com.testdb.demo.entity.letter.Comment">-->
+<!--        SELECT commenter_name, nickname, content, comment_time,-->
+<!--        avatar.url AS avatarUrl-->
+<!--        FROM comment-->
+<!--        LEFT JOIN avatar ON commenter_name = avatar.username-->
+<!--        WHERE replyId = #{level} And pid = #{motherId}-->
+<!--        ORDER BY comment_time ASC-->
+<!--    </select>-->
 
 </mapper>

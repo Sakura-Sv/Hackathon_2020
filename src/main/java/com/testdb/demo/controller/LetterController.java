@@ -13,6 +13,7 @@ import com.testdb.demo.utils.QiniuUtil;
 import com.testdb.demo.utils.Result;
 import com.testdb.demo.utils.ResultStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -37,8 +38,8 @@ public class LetterController {
     }
 
     @PostMapping
-    public Result<Void> postLetter(Principal principal, @RequestBody Letter letter){
-        ls.postLetter(principal, letter);
+    public Result<Void> postLetter(Authentication token, @RequestBody Letter letter){
+        ls.postLetter(token, letter);
         return Result.success();
     }
 
