@@ -2,6 +2,7 @@ package com.testdb.demo.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.testdb.demo.entity.letter.Comment;
+import com.testdb.demo.entity.user.User;
 import com.testdb.demo.service.CommentService;
 import com.testdb.demo.service.LetterService;
 import com.testdb.demo.utils.AjaxResponseBody;
@@ -48,8 +49,7 @@ public class CommentController {
         else if(cs.checkInvalidCommentId(comment.getMotherId())){
             return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("不存在这条评论！"));
         }
-
-        cs.postComment(principal.getName(),comment);
+        cs.postComment(principal, comment);
         return Result.success();
     }
 

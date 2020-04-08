@@ -20,6 +20,7 @@ public class Comment {
     @TableId(type = IdType.AUTO)
     private long id;
     private String commenterName;
+    private String nickname;
     private String commentText;
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)

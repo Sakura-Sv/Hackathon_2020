@@ -17,14 +17,14 @@ public class StarController {
     @Autowired
     StarService ss;
 
-    @GetMapping
-    public Result<Void> star(Principal principal,
-                             @RequestBody JSONObject jsonObject){
-        ss.star(principal.getName(),
-                jsonObject.getString("username"),
-                jsonObject.getLongValue("motherId"));
-        return Result.success();
-    }
+//    @GetMapping
+//    public Result<Void> star(Principal principal,
+//                             @RequestBody JSONObject jsonObject){
+//        ss.star(principal.getName(),
+//                jsonObject.getString("username"),
+//                jsonObject.getLongValue("motherId"));
+//        return Result.success();
+//    }
 
     @GetMapping("/count")
     public Result<Long> star(@RequestParam long letterId ){

@@ -6,10 +6,12 @@
 
     <select id="getOthersMoodList" resultType="com.testdb.demo.entity.mood.BaseMood">
         SELECT mood.username,
+        user.nickname,
         mood_type,
-        description,
+        mood.description,
         avatar.url AS avatar_url
         FROM mood
+        LEFT JOIN user ON user.username = mood.username
         LEFT JOIN avatar on mood.username = avatar.username
         WHERE mood_date = #{currentDay} AND  mood.username != #{username}
         AND is_public = 1 AND mood_type = #{userMoodType}

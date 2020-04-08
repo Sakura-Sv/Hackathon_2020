@@ -5,12 +5,15 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.testdb.demo.entity.letter.Comment;
 import com.testdb.demo.entity.letter.Letter;
+import com.testdb.demo.entity.user.BaseUser;
 import com.testdb.demo.entity.user.Message;
+import com.testdb.demo.entity.user.User;
 import com.testdb.demo.mapper.CommentMapper;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -32,14 +35,18 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment> {
     }
 
     @SneakyThrows
-    public void postComment(String username, Comment comment){
+    public void postComment(Principal principal, Comment comment){
+        BaseUser user = UserService.p2B(principal);
         LocalDateTime postTime = LocalDateTime.now();
+        comment.setNickname(user.getNickname());
         comment.setCommentTime(postTime);
-        comment.setCommenterName(username);
+        comment.setCommenterName(user.getUsername());
         this.save(comment);
-        messageService.sendMessage(username,
+        messageService.sendMessage(user.getUsername(),
+                user.getAvatar(),
                 comment.getCommenterName(),
                 comment.getCommentTime(),
+                comment.getCommentText(),
                 comment.getLevel(),
                 comment.getMotherId());
     }

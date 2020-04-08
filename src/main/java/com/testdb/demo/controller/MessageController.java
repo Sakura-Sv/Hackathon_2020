@@ -1,5 +1,7 @@
 package com.testdb.demo.controller;
 
+import com.testdb.demo.entity.user.Message;
+import com.testdb.demo.service.MessageService;
 import com.testdb.demo.service.RedisService;
 import com.testdb.demo.utils.AjaxResponseBody;
 import com.testdb.demo.utils.Result;
@@ -9,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/message")
@@ -16,12 +21,11 @@ import java.security.Principal;
 public class MessageController {
 
     @Autowired
-    RedisService redisService;
+    MessageService messageService;
 
     @GetMapping
-    public Result<Void> getMessageList(Principal principal){
-        System.out.println(redisService.lGet(principal.getName(), 0, -1));
-        return Result.success();
+    public Result<List<Message>> getMessageList(Principal principal){
+        return Result.success(messageService.getMessageList(principal.getName()));
     }
 
 }

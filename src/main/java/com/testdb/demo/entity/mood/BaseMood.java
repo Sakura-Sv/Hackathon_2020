@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BaseMood{
     private String username;
+    private String nickname;
     private String moodType;
     private String description;
     private String avatarUrl;

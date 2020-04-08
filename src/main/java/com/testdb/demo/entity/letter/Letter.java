@@ -19,6 +19,7 @@ public class Letter extends BaseLetter {
     private long id;
     private String letterType;
     private String author;
+    private String nickname;
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate createTime;

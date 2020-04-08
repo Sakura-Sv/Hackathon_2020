@@ -38,7 +38,7 @@ public class LetterController {
 
     @PostMapping
     public Result<Void> postLetter(Principal principal, @RequestBody Letter letter){
-        ls.postLetter(principal.getName(), letter);
+        ls.postLetter(principal, letter);
         return Result.success();
     }
 

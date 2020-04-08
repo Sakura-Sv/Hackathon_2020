@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -45,7 +46,8 @@ public class TestController {
     }
 
     @GetMapping("/url")
-    public String getUrl() {
+    public String getUrl(Principal principal) {
+        System.out.println(principal);
         String fileName = "test1.jpg";
         String domainOfBucket = "http://devtools.qiniu.com";
         String finalUrl = String.format("%s/%s", domainOfBucket, fileName);

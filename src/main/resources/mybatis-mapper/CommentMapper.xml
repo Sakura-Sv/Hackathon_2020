@@ -5,7 +5,7 @@
 <mapper namespace="com.testdb.demo.mapper.CommentMapper">
 
     <select id="getCommentList" resultType="com.testdb.demo.entity.letter.Comment">
-        SELECT commenter_name, comment_text, comment_time,
+        SELECT commenter_name, nickname, comment_text, comment_time,
         avatar.url AS avatarUrl
         FROM comment
         LEFT JOIN avatar ON commenter_name = avatar.username

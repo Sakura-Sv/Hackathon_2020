@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -208,5 +209,10 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         }
 
         return true;
+    }
+
+    @SneakyThrows
+    public static BaseUser p2B(Principal principal){
+        return (BaseUser)principal;
     }
 }
