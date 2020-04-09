@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.testdb.demo.entity.letter.Letter;
 import com.testdb.demo.entity.user.BaseUser;
+import com.testdb.demo.entity.user.User;
 import com.testdb.demo.mapper.letter.LetterMapper;
 import com.testdb.demo.service.message.MessageService;
 import com.testdb.demo.service.user.UserService;
@@ -20,6 +21,9 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
 
     @Autowired
     LetterMapper letterMapper;
+
+    @Autowired
+    UserService userService;
 
     @SneakyThrows
     public Letter getLetter(String id){
@@ -44,7 +48,10 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
         else {
             letter.setPreview(letter.getContent());
         }
-
+        letter.setTargetUsername(this.getOne(new QueryWrapper<Letter>()
+                .select("author")
+                .eq("id", letter.getTargetLetterId()))
+                .getAuthor());
         letter.setCreateTime(LocalDate.now());
         this.save(letter);
 
