@@ -27,6 +27,7 @@ public class Letter extends BaseLetter {
     private String content;
     private String annexUrl;
     private Long starCount;
+    private Long targetLetterId;
     private String targetUsername;
     private Long commentCount;
 
