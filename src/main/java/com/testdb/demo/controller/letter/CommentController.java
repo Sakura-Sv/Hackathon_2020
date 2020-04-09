@@ -1,5 +1,6 @@
 package com.testdb.demo.controller.letter;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.testdb.demo.entity.letter.Comment;
 import com.testdb.demo.service.letter.CommentService;
@@ -10,6 +11,8 @@ import com.testdb.demo.utils.response.ResultStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.sql.ResultSet;
 
 
 @RestController
@@ -43,6 +46,14 @@ public class CommentController {
         cs.postComment(token, comment);
 
         return Result.success();
+    }
+
+    @GetMapping("/count")
+    public Result<Integer> getCommentNum(@RequestParam Long aid) {
+        if (aid == null || ls.checkInvalidLetterId(aid)) {
+            return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("没有找到这封信QwQ"));
+        }
+        return Result.success(cs.count(new QueryWrapper<Comment>().eq("aid", aid)));
     }
 
 }

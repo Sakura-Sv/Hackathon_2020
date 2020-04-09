@@ -1,6 +1,7 @@
 package com.testdb.demo.service.letter;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.testdb.demo.entity.letter.Comment;
@@ -39,7 +40,6 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment>{
     @SneakyThrows
     public Page<Comment> getCommentList( int index, long aid){
         Page<Comment> page = new Page<>(index, 20);
-//        System.out.println(commentMapper.getCommentList(motherId));
         return page.setRecords(this.baseMapper.getCommentList(aid, page));
     }
 
