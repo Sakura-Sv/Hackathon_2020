@@ -105,7 +105,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
     @SneakyThrows
     public Boolean checkInvalidUser(String username){
-        return getOne(new QueryWrapper<User>().select("id").eq("username", username)) != null;
+        return getOne(new QueryWrapper<User>().select("id").eq("username", username)) == null;
     }
 
     @Transactional
