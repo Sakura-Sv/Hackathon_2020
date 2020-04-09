@@ -14,6 +14,7 @@ public class BaseLetterService extends ServiceImpl<BaseLetterMapper, BaseLetter>
         return this.page(new Page<>(index,5),new QueryWrapper<BaseLetter>()
                 .select("id", "letter_type", "preview", "create_time")
                 .eq("author", username)
+                .ne("letter_type", "3")
                 .orderByDesc("create_time"));
 
     }
