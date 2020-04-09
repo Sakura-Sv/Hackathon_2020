@@ -26,6 +26,8 @@ public class StarService {
     @Autowired
     private LetterService letterService;
 
+    public static final Integer STAR_TYPE = 1;
+
     @SneakyThrows
     public Boolean star(Authentication token, String targetUsername, long aid){
         BaseUser user = UserService.t2b(token);
@@ -33,22 +35,33 @@ public class StarService {
             redisService.sSet(aid + ".star", user.getUsername());
 
             Letter targetLetter = letterService.getOne(new QueryWrapper<Letter>()
-                    .select("letter_type").eq("id", aid));
+                    .select("preview", "letter_type").eq("id", aid));
 
             messageService.sendMessage(targetUsername,
                     user.getUsername(),
                     user.getAvatar(),
                     LocalDateTime.now(),
+                    getStarTips(user.getNickname(), targetLetter.getLetterType()),
                     getStarContent(user.getNickname(), targetLetter.getLetterType()),
-                    getStarLevel(targetLetter.getLetterType()),
+                    targetLetter.getPreview(),
+                    Integer.parseInt(targetLetter.getLetterType()),
+                    STAR_TYPE,
                     aid, aid);
             return true;
         }
         return false;
     }
 
+    public String getStarTips(String nickname, String letterType) throws Exception {
+        switch(letterType){
+            case("1"): return "用户" + nickname + "和你击了掌";
+            case("2") : return "用户" + nickname + "拥抱了你";
+        }
+        throw new Exception("Wrong Letter Type");
+    }
+
     public Long countStar(long letterId){
-        return messageService.countStar(letterId);
+        return redisService.sGetSetSize(letterId + ".star");
     }
 
     public String getStarContent(String nickname, String letterType) throws Exception{

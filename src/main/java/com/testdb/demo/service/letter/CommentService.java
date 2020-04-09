@@ -29,6 +29,8 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment>{
     @Autowired
     private LetterService letterService;
 
+    private static final Integer COMMENT_TYPE = 2;
+
     @SneakyThrows
     public Boolean checkInvalidCommentId(long commentId){
         return this.getOne(new QueryWrapper<Comment>().select("id").eq("id", commentId)) == null;
@@ -52,7 +54,7 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment>{
 
         Letter targetLetter = letterService
                 .getOne(new QueryWrapper<Letter>()
-                        .select("author", "letter_type")
+                        .select("author", "letter_type", "preview")
                         .eq("id",comment.getAid()));
 
         this.save(comment);
@@ -61,14 +63,17 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment>{
                 comment.getCommenterName(),
                 user.getAvatar(),
                 comment.getCommentTime(),
+                getCommentTips(user.getNickname()),
                 comment.getContent(),
-                getCommentLevel(targetLetter.getLetterType()),
+                targetLetter.getPreview(),
+                Integer.parseInt(targetLetter.getLetterType()),
+                COMMENT_TYPE,
                 comment.getAid(),
                 comment.getAid());
     }
 
-    public String getCommentLevel(String letterType){
-        return letterType + "2";
+    public String getCommentTips(String nickname){
+        return "用户"+nickname+"评论了你:";
     }
 
 }

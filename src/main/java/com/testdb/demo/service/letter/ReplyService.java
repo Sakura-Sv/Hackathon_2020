@@ -3,6 +3,7 @@ package com.testdb.demo.service.letter;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.testdb.demo.entity.letter.Comment;
 import com.testdb.demo.entity.letter.Letter;
 import com.testdb.demo.entity.letter.Reply;
 import com.testdb.demo.entity.user.BaseUser;
@@ -36,12 +37,17 @@ public class ReplyService extends ServiceImpl<ReplyMapper, Reply> {
     @Autowired
     private UserService userService;
 
+    private static final Integer REPLY_TYPE = 3;
+
     @SneakyThrows
     @Transactional
     public void reply(Authentication token, Reply reply){
         BaseUser user = UserService.t2b(token);
         if(reply.getContent().length() >= 18){
-            reply.setContent(reply.getContent().substring(0,18)+"...");
+            reply.setPreview(reply.getContent().substring(0,18)+"...");
+        }
+        else {
+            reply.setPreview(reply.getContent());
         }
         reply.setCommenterName(user.getUsername());
         reply.setNickname(user.getNickname());
@@ -55,22 +61,28 @@ public class ReplyService extends ServiceImpl<ReplyMapper, Reply> {
                 .getOne(new QueryWrapper<Letter>()
                         .select("letter_type")
                         .eq("id", reply.getAid()));
-
+        Comment sourceComment = commentService
+                .getOne(new QueryWrapper<Comment>()
+                        .select("content")
+                        .eq("id", reply.getCommentId()));
         this.save(reply);
 
         messageService.sendMessage(reply.getTargetUsername(),
                 user.getUsername(),
                 user.getAvatar(),
                 reply.getCommentTime(),
+                getReplyTips(user.getNickname()),
                 reply.getContent(),
-                getReplyLevel(sourceLetter.getLetterType()),
+                sourceComment.getPreview(),
+                Integer.parseInt(sourceLetter.getLetterType()),
+                REPLY_TYPE,
                 reply.getCommentId(),
                 reply.getPid());
 
     }
 
-    public String getReplyLevel(String letterType) {
-        return letterType+"3";
+    public String getReplyTips(String nickname){
+        return "用户" + nickname + "回复了你的评论";
     }
 
     public Page<Reply> getReplyList(int index, long pid){

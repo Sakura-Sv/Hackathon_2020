@@ -7,6 +7,7 @@ import com.testdb.demo.utils.response.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
@@ -21,8 +22,9 @@ public class MessageController {
     MessageService messageService;
 
     @GetMapping
-    public Result<List<Message>> getMessageList(Principal principal){
-        return Result.success(messageService.getMessageList(principal.getName()));
+    public Result<List<Message>> getMessageList(Principal principal,
+                                                @RequestParam(value = "index", defaultValue = "1") int index){
+        return Result.success(messageService.getMessageList(principal.getName(), index));
     }
 
 }

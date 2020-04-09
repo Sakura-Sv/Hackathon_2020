@@ -32,4 +32,13 @@ public class Comment {
     @TableField(exist = false)
     private List<Reply> reply;
 
+    public String getPreview(){
+        if(this.content.length() > 18){
+            return this.content.substring(0,18)+"...";
+        }
+        else {
+            return this.content;
+        }
+    }
+
 }

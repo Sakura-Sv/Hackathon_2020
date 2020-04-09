@@ -55,6 +55,9 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
                     .eq("id", letter.getTargetLetterId()))
                     .getAuthor());
         }
+        if(letter.getAnnexUrl()!=null){
+            letter.setAnnexUrl("http://q81okm9pv.bkt.clouddn.com/"+letter.getAnnexUrl());
+        }
         letter.setCreateTime(LocalDateTime.now());
         this.save(letter);
 

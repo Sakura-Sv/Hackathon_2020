@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Message {
 
     // 行为发起者
@@ -20,30 +22,21 @@ public class Message {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createTime;
-    //行为信息
-    private String content;
     /**
-     *  level由两位数组成表示    第一位1/2/3 表示幸运信/解忧信/回信
-     *                        第二位1/2/3 表示点赞/评论/楼中楼
+     * tips xxx点赞了你
+     * content 233333333我也觉得
+     * preview 卢本伟牛逼！！！！！！！！
      */
-    private String level;
+    private String tips;
+    private String content;
+    private String preview;
+    /**
+     *      letterType  1/2/3 表示幸运信/解忧信/回信
+     *      contentType 1/2/3 表示点赞/评论/楼中楼
+     */
+    private Integer letterType;
+    private Integer contentType;
     private long pid;
     private long targetId;
-
-    public Message(String username,
-                   String avatarUrl,
-                   LocalDateTime createTime,
-                   String content,
-                   String level,
-                   long pid,
-                   long targetId){
-        this.username = username;
-        this.avatarUrl = avatarUrl;
-        this.createTime = createTime;
-        this.content = content;
-        this.level = level;
-        this.pid = pid;
-        this.targetId = targetId;
-    }
 
 }
