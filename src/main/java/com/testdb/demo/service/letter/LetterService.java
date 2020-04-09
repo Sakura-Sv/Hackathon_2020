@@ -48,10 +48,12 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
         else {
             letter.setPreview(letter.getContent());
         }
-        letter.setTargetUsername(this.getOne(new QueryWrapper<Letter>()
-                .select("author")
-                .eq("id", letter.getTargetLetterId()))
-                .getAuthor());
+        if(letter.getLetterType().equals("3")) {
+            letter.setTargetUsername(this.getOne(new QueryWrapper<Letter>()
+                    .select("author")
+                    .eq("id", letter.getTargetLetterId()))
+                    .getAuthor());
+        }
         letter.setCreateTime(LocalDate.now());
         this.save(letter);
 
