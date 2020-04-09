@@ -25,18 +25,29 @@ public class CommentController {
     @Autowired
     LetterService ls;
 
-//    @GetMapping
-//    public Result<Page<Comment>> getCommentList(@RequestParam(value = "index", defaultValue = "1") int index,
-//                                                @RequestParam long motherId,
-//                                                @RequestParam(value = "level", defaultValue = "1") int level){
-//        if(ls.checkInvalidLetterId(motherId)){
-//            return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("不存在这封信！"));
+    @GetMapping
+    public Result<Page<Comment>> getCommentList(@RequestParam(value = "index", defaultValue = "1") int index,
+                                                @RequestParam long pid,
+                                                @RequestParam(value = "level", defaultValue = "1") int level){
+        /**
+         * level 1  获取文章评论列表
+         * level 2  获取文章回复列表
+         */
+        if(ls.checkInvalidLetterId(pid)){
+            return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("不存在这封信！"));
+        }
+        else if(cs.checkInvalidCommentId(pid)){
+            return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("不存在这条评论！"));
+        }
+
+        if(level == 1) {
+            return Result.success(cs.getCommentList(index, pid));
+        }
+//        else {
+//            return Result.success(cs.getReplyList(index, pid));
 //        }
-//        else if(cs.checkInvalidCommentId(motherId)){
-//            return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("不存在这条评论！"));
-//        }
-//        return Result.success(cs.getCommentList(index, motherId, level));
-//    }
+        return null;
+    }
 
     @PostMapping
     public Result<Void> postComment(Authentication token, @RequestBody Comment comment){

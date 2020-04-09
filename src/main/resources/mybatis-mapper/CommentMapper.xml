@@ -4,13 +4,35 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.testdb.demo.mapper.CommentMapper">
 
-<!--    <select id="getCommentList" resultType="com.testdb.demo.entity.letter.Comment">-->
-<!--        SELECT commenter_name, nickname, content, comment_time,-->
-<!--        avatar.url AS avatarUrl-->
-<!--        FROM comment-->
-<!--        LEFT JOIN avatar ON commenter_name = avatar.username-->
-<!--        WHERE replyId = #{level} And pid = #{motherId}-->
-<!--        ORDER BY comment_time ASC-->
-<!--    </select>-->
+    <resultMap id="Comment" type="com.testdb.demo.entity.letter.Comment">
+        <id column="id" property="id" javaType="long"/>
+        <result column="commenter_name" property="commenterName"/>
+        <result column="nickname" property="nickname"/>
+        <result column="content" property="content"/>
+        <result column="comment_time" property="commentTime" javaType="java.time.LocalDateTime"/>
+        <result column="aid" property="aid" javaType="long"/>
+        <result column="avatar_url" property="avatarUrl"/>
+        <collection property="reply" column="id" javaType="ArrayList"
+                    ofType="com.testdb.demo.entity.letter.Reply" select="getReplyListPreview"/>
+    </resultMap>
+
+    <select id="getCommentList" resultMap="Comment">
+        SELECT comment.id, commenter_name, nickname, content, comment_time, aid,
+        avatar.url AS avatarUrl
+        FROM comment
+        LEFT JOIN avatar ON commenter_name = avatar.username
+        WHERE  aid = #{aid}
+        ORDER BY comment_time DESC
+    </select>
+
+    <select id="getReplyListPreview" resultType="com.testdb.demo.entity.letter.Reply">
+        SELECT reply.id, commenter_name, nickname, content, comment_time,
+                target_username, target_nickname, comment_id, pid
+        FROM reply
+        LEFT JOIN avatar ON commenter_name = avatar.username
+        WHERE comment_id = #{aid}
+        ORDER BY comment_time ASC
+        LIMIT 2
+    </select>
 
 </mapper>

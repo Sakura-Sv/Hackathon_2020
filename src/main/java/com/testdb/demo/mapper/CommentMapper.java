@@ -3,6 +3,7 @@ package com.testdb.demo.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.testdb.demo.entity.letter.Comment;
+import com.testdb.demo.entity.letter.Reply;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Repository
 public interface CommentMapper extends BaseMapper<Comment> {
 
-//    List<ReplyComment> getCommentList(long motherId, int level, Page<ReplyComment> pagination);
+    List<Comment> getCommentList(long aid, Page<Comment> pagination);
 
+//    List<Reply> getReplyList();
 }

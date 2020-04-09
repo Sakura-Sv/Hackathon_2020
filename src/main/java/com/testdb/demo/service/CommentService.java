@@ -24,16 +24,20 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment>{
     @Autowired
     private MessageService messageService;
 
-//    @SneakyThrows
-//    public Boolean checkInvalidCommentId(long commentId){
-//        return this.getOne(new QueryWrapper<ReplyComment>().select("id").eq("id", commentId)) == null;
-//    }
+    @Autowired
+    private CommentMapper commentMapper;
 
-//    @SneakyThrows
-//    public Page<Comment> getCommentList( int index, long motherId, int level){
-//        Page<Comment> page = new Page<>(index, 20);
-//        return page.setRecords(this.baseMapper.getCommentList(motherId, level, page));
-//    }
+    @SneakyThrows
+    public Boolean checkInvalidCommentId(long commentId){
+        return this.getOne(new QueryWrapper<Comment>().select("id").eq("id", commentId)) == null;
+    }
+
+    @SneakyThrows
+    public Page<Comment> getCommentList( int index, long motherId){
+        Page<Comment> page = new Page<>(index, 20);
+//        System.out.println(commentMapper.getCommentList(motherId));
+        return page.setRecords(this.baseMapper.getCommentList(motherId, page));
+    }
 
     @SneakyThrows
     public void postComment(Authentication token, Comment comment){

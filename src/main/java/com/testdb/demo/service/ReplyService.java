@@ -27,11 +27,6 @@ public class ReplyService extends ServiceImpl<ReplyMapper, Reply> {
     @Autowired
     UserService userService;
 
-    public Boolean checkInvalidCommentId(String commentId) {
-        return commentService.getOne(new QueryWrapper<Comment>().select("id").eq("id", commentId)) == null;
-    }
-
-
     public void reply(Authentication token, Reply reply){
         BaseUser user = UserService.t2b(token);
         reply.setCommenterName(user.getUsername());

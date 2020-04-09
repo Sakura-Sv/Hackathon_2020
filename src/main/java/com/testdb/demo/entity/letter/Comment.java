@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -28,5 +29,7 @@ public class Comment {
     private Long aid;
     @TableField(exist = false)
     private String avatarUrl;
+    @TableField(exist = false)
+    private List<Reply> reply;
 
 }
