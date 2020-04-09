@@ -26,9 +26,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
-        if(request.getContentType().equals(MediaType.APPLICATION_JSON)
-                ||request.getContentType().equals(MediaType.APPLICATION_JSON_VALUE)){
-
+        if(request.getContentType().contains(MediaType.APPLICATION_JSON.toString())
+                ||request.getContentType().contains(MediaType.APPLICATION_JSON_VALUE)){
             UsernamePasswordAuthenticationToken authRequest = null;
             try (InputStream is = request.getInputStream()){
                 AuthenticationBean authenticationBean = JSON.parseObject(is, AuthenticationBean.class);
