@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.testdb.demo.service.letter.StarService;
 import com.testdb.demo.utils.response.AjaxResponseBody;
 import com.testdb.demo.utils.response.Result;
+import com.testdb.demo.utils.response.ResultStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +20,11 @@ public class StarController {
     @GetMapping
     public Result<Void> star(Authentication token,
                              @RequestBody JSONObject jsonObject){
-        ss.star(token,
+        if(!ss.star(token,
                 jsonObject.getString("targetUsername"),
-                jsonObject.getLongValue("aid"));
+                jsonObject.getLongValue("aid"))){
+            return Result.failure(ResultStatus.FAILURE.setMessage("已经给这篇文章点过赞了喔！"));
+        }
         return Result.success();
     }
 

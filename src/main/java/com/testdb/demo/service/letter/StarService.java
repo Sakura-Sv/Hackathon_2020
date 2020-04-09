@@ -27,7 +27,7 @@ public class StarService {
     private LetterService letterService;
 
     @SneakyThrows
-    public void star(Authentication token, String targetUsername, long aid){
+    public Boolean star(Authentication token, String targetUsername, long aid){
         BaseUser user = UserService.t2b(token);
         if( ! redisService.sHasKey(aid + ".star", user.getUsername())) {
             redisService.sSet(aid + ".star", user.getUsername());
@@ -42,7 +42,9 @@ public class StarService {
                     getStarContent(user.getNickname(), targetLetter.getLetterType()),
                     getStarLevel(targetLetter.getLetterType()),
                     aid, aid);
+            return true;
         }
+        return false;
     }
 
     public Long countStar(long letterId){
