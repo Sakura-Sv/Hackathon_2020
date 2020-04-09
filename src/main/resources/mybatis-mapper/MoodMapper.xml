@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.testdb.demo.mapper.MoodMapper">
+<mapper namespace="com.testdb.demo.mapper.mood.MoodMapper">
 
     <select id="getOthersMoodList" resultType="com.testdb.demo.entity.mood.BaseMood">
         SELECT mood.username,

@@ -1,6 +1,6 @@
 package com.testdb.demo.config.auth;
 
-import com.testdb.demo.service.CustomUserDetailsService;
+import com.testdb.demo.service.user.CustomUserDetailsService;
 import com.testdb.demo.utils.JwtTokenUtil;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;

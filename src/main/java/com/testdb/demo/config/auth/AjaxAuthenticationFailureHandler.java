@@ -1,8 +1,8 @@
 package com.testdb.demo.config.auth;
 
 import com.alibaba.fastjson.JSON;
-import com.testdb.demo.utils.Result;
-import com.testdb.demo.utils.ResultStatus;
+import com.testdb.demo.utils.response.Result;
+import com.testdb.demo.utils.response.ResultStatus;
 import lombok.SneakyThrows;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
