@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 @Service
@@ -54,7 +55,7 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
                     .eq("id", letter.getTargetLetterId()))
                     .getAuthor());
         }
-        letter.setCreateTime(LocalDate.now());
+        letter.setCreateTime(LocalDateTime.now());
         this.save(letter);
 
     }
