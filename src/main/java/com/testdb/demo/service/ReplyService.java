@@ -1,6 +1,7 @@
 package com.testdb.demo.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.testdb.demo.entity.letter.Comment;
 import com.testdb.demo.entity.letter.Letter;
@@ -14,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ReplyService extends ServiceImpl<ReplyMapper, Reply> {
@@ -27,6 +29,7 @@ public class ReplyService extends ServiceImpl<ReplyMapper, Reply> {
     @Autowired
     UserService userService;
 
+    @SneakyThrows
     public void reply(Authentication token, Reply reply){
         BaseUser user = UserService.t2b(token);
         reply.setCommenterName(user.getUsername());
@@ -38,6 +41,13 @@ public class ReplyService extends ServiceImpl<ReplyMapper, Reply> {
                         .eq("username", reply.getTargetUsername()))
                 .getNickname());
         this.save(reply);
+    }
+
+    @SneakyThrows
+    public Page<Reply> getReplyList(int index, long pid){
+        Page<Reply> page = new Page<>(index, 20);
+//        System.out.println(commentMapper.getCommentList(motherId));
+        return page.setRecords(this.baseMapper.getReplyList(pid, page));
     }
 
 }

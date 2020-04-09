@@ -33,10 +33,10 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment>{
     }
 
     @SneakyThrows
-    public Page<Comment> getCommentList( int index, long motherId){
+    public Page<Comment> getCommentList( int index, long aid){
         Page<Comment> page = new Page<>(index, 20);
 //        System.out.println(commentMapper.getCommentList(motherId));
-        return page.setRecords(this.baseMapper.getCommentList(motherId, page));
+        return page.setRecords(this.baseMapper.getCommentList(aid, page));
     }
 
     @SneakyThrows
