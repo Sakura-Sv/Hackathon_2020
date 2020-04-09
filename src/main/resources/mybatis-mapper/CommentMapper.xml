@@ -26,7 +26,7 @@
     </select>
 
     <select id="getReplyListPreview" resultType="com.testdb.demo.entity.letter.Reply">
-        SELECT reply.id, commenter_name, nickname, content, comment_time,
+        SELECT reply.id, commenter_name, nickname, preview, comment_time,
                 target_username, target_nickname, comment_id, pid
         FROM reply
         LEFT JOIN avatar ON commenter_name = avatar.username

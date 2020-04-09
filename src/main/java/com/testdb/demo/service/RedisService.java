@@ -409,7 +409,7 @@ public class RedisService {
     //===============================list=================================
 
     /**
-     * 获取list缓存的内容
+     * 根据range获取元素列表
      *
      * @param key   键
      * @param start 开始
@@ -426,7 +426,7 @@ public class RedisService {
     }
 
     /**
-     * 获取list缓存的长度
+     * 获取队列长度
      *
      * @param key 键
      * @return
@@ -457,13 +457,13 @@ public class RedisService {
     }
 
     /**
-     * 将list放入缓存
+     * 右入队
      *
      * @param key   键
      * @param value 值
      * @return
      */
-    public boolean lSet(String key, Object value) {
+    public boolean lRPush(String key, Object value) {
         try {
             redisTemplate.opsForList().rightPush(key, value);
             return true;
@@ -474,14 +474,31 @@ public class RedisService {
     }
 
     /**
-     * 将list放入缓存
+     * 左入队
+     *
+     * @param key   键
+     * @param value 值
+     * @return
+     */
+    public boolean lLPush(String key, Object value){
+        try{
+            redisTemplate.opsForList().leftPush(key, value);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 右入队并设置有效时间
      *
      * @param key   键
      * @param value 值
      * @param time  时间(秒)
      * @return
      */
-    public boolean lSet(String key, Object value, long time) {
+    public boolean lRPush(String key, Object value, long time) {
         try {
             redisTemplate.opsForList().rightPush(key, value);
             if (time > 0) {
@@ -495,13 +512,34 @@ public class RedisService {
     }
 
     /**
-     * 将list放入缓存
+     * 右入队并设置有效时间
+     *
+     * @param key   键
+     * @param value 值
+     * @param time  时间(秒)
+     * @return
+     */
+    public boolean lLPush(String key, Object value, long time) {
+        try {
+            redisTemplate.opsForList().leftPush(key, value);
+            if (time > 0) {
+                expire(key, time);
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 右批量入队
      *
      * @param key   键
      * @param value 值
      * @return
      */
-    public boolean lSet(String key, List<Object> value) {
+    public boolean lRPush(String key, List<Object> value) {
         try {
             redisTemplate.opsForList().rightPushAll(key, value);
             return true;
@@ -512,16 +550,54 @@ public class RedisService {
     }
 
     /**
-     * 将list放入缓存
+     * 左批量入队
+     *
+     * @param key   键
+     * @param value 值
+     * @return
+     */
+    public boolean lLPush(String key, List<Object> value){
+        try{
+            redisTemplate.opsForList().leftPushAll(key, value);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 右批量入队并设置有效时间
      *
      * @param key   键
      * @param value 值
      * @param time  时间(秒)
      * @return
      */
-    public boolean lSet(String key, List<Object> value, long time) {
+    public boolean lRPush(String key, List<Object> value, long time) {
         try {
             redisTemplate.opsForList().rightPushAll(key, value);
+            if (time > 0) {
+                expire(key, time);
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * 左批量入队并设置有效时间
+     *
+     * @param key   键
+     * @param value 值
+     * @param time  时间(秒)
+     * @return
+     */
+    public boolean lLPush(String key, List<Object> value, long time) {
+        try {
+            redisTemplate.opsForList().leftPushAll(key, value);
             if (time > 0) {
                 expire(key, time);
             }
@@ -551,7 +627,7 @@ public class RedisService {
     }
 
     /**
-     * 移除N个值为value
+     * 移除N个值为value的元素
      *
      * @param key   键
      * @param count 移除多少个
@@ -566,6 +642,19 @@ public class RedisService {
             e.printStackTrace();
             return 0;
         }
+    }
+
+    /**
+     * 留下范围内的列表（左右闭区间）
+     * @param key   键
+     * @param start 起始位置
+     * @param end 结束位置
+     * @return
+     */
+    @SneakyThrows
+    public boolean lTrim(String key, long start, long end){
+        redisTemplate.opsForList().trim(key, start, end);
+        return true;
     }
 
 }

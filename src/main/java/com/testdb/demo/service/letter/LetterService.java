@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.testdb.demo.entity.letter.Letter;
 import com.testdb.demo.entity.user.BaseUser;
 import com.testdb.demo.mapper.letter.LetterMapper;
+import com.testdb.demo.service.message.MessageService;
 import com.testdb.demo.service.user.UserService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,7 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
 
         letter.setCreateTime(LocalDate.now());
         this.save(letter);
+
     }
 
 }

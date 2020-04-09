@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.testdb.demo.entity.letter.Comment;
+import com.testdb.demo.entity.letter.Letter;
 import com.testdb.demo.entity.user.BaseUser;
 import com.testdb.demo.mapper.letter.CommentMapper;
 import com.testdb.demo.service.message.MessageService;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 
 @Service
@@ -23,6 +25,9 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment>{
 
     @Autowired
     private CommentMapper commentMapper;
+
+    @Autowired
+    private LetterService letterService;
 
     @SneakyThrows
     public Boolean checkInvalidCommentId(long commentId){
@@ -37,20 +42,33 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment>{
     }
 
     @SneakyThrows
+    @Transactional
     public void postComment(Authentication token, Comment comment){
         BaseUser user = UserService.t2b(token);
         LocalDateTime postTime = LocalDateTime.now();
         comment.setNickname(user.getNickname());
         comment.setCommentTime(postTime);
         comment.setCommenterName(user.getUsername());
+
+        Letter targetLetter = letterService
+                .getOne(new QueryWrapper<Letter>()
+                        .select("author", "letter_type")
+                        .eq("id",comment.getAid()));
+
         this.save(comment);
-//        messageService.sendMessage(user.getUsername(),
-//                user.getAvatar(),
-//                comment.getCommenterName(),
-//                comment.getCommentTime(),
-//                comment.getCommentText(),
-//                comment.getLevel(),
-//                comment.getMotherId());
+
+        messageService.sendMessage(targetLetter.getAuthor(),
+                comment.getCommenterName(),
+                user.getAvatar(),
+                comment.getCommentTime(),
+                comment.getContent(),
+                getCommentLevel(targetLetter.getLetterType()),
+                comment.getAid(),
+                comment.getAid());
+    }
+
+    public String getCommentLevel(String letterType){
+        return letterType + "2";
     }
 
 }

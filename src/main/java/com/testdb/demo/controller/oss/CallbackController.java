@@ -1,4 +1,4 @@
-package com.testdb.demo.controller.orm;
+package com.testdb.demo.controller.oss;
 
 import com.testdb.demo.service.user.AvatarService;
 import com.testdb.demo.utils.response.AjaxResponseBody;

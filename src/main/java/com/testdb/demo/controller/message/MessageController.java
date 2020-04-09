@@ -1,6 +1,6 @@
 package com.testdb.demo.controller.message;
 
-import com.testdb.demo.entity.user.Message;
+import com.testdb.demo.entity.message.Message;
 import com.testdb.demo.service.message.MessageService;
 import com.testdb.demo.utils.response.AjaxResponseBody;
 import com.testdb.demo.utils.response.Result;

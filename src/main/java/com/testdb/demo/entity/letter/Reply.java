@@ -21,12 +21,14 @@ public class Reply  {
     private Long id;
     private String commenterName;
     private String nickname;
+    private String preview;
     private String content;
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime commentTime;
     private String targetUsername;
     private String targetNickname;
+    private Long aid;
     private Long commentId;
     private Long pid;
     @TableField(exist = false)

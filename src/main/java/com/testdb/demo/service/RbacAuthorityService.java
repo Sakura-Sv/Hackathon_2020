@@ -35,7 +35,6 @@ public class RbacAuthorityService {
             urls.add("/**"); // 这些 url 都是要登录后才能访问，且其他的 url 都不能访问！
 
             AntPathMatcher antPathMatcher = new AntPathMatcher();
-            System.out.println(authentication);
             for (String url : urls) {
                 if (antPathMatcher.match(url, request.getRequestURI())) {
                     hasPermission = true;
