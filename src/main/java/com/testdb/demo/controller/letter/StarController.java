@@ -29,8 +29,8 @@ public class StarController {
     }
 
     @GetMapping("/count")
-    public Result<Long> star(@RequestParam long letterId ){
-        return Result.success(ss.countStar(letterId));
+    public Result<Long> star(@RequestParam long aid ){
+        return Result.success(ss.countStar(aid));
     }
 
 }
