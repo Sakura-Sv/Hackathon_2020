@@ -37,6 +37,7 @@ public class ReplyController {
                               @RequestBody Reply reply){
         if(reply.getCommentId() == null ||
         reply.getPid() == null ||
+        reply.getTargetUsername() == null ||
         cs.checkInvalidCommentId(reply.getCommentId())) {
             return Result.failure(ResultStatus.WRONG_PARAMETERS);
         }

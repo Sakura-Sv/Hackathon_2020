@@ -10,3 +10,4 @@ docker-compose build
 docker-compose up -d
 
 # app自动更新脚本
+# maintainer: LiuZhen
