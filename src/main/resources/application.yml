@@ -37,7 +37,6 @@ spring:
     protocol: smtp
     from: sakura-cg@foxmail.com
 
-
 mybatis-plus:
   mapper-locations: mybatis-mapper/*.xml
 
