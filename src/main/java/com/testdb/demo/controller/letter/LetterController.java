@@ -31,7 +31,7 @@ public class LetterController {
     BaseLetterService bls;
 
     @GetMapping
-    public Result<Letter> getLetter(@RequestParam("id") String id){
+    public Result<Letter> getLetter(@RequestParam("id") Long id){
         return Result.success(ls.getLetter(id));
     }
 

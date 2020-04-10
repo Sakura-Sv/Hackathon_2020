@@ -16,6 +16,5 @@ public class BaseLetterService extends ServiceImpl<BaseLetterMapper, BaseLetter>
                 .eq("author", username)
                 .ne("letter_type", "3")
                 .orderByDesc("create_time"));
-
     }
 }

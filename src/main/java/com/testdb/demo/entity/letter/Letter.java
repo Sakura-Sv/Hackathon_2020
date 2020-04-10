@@ -1,6 +1,7 @@
 package com.testdb.demo.entity.letter;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -23,15 +24,15 @@ public class Letter extends BaseLetter {
     private String letterType;
     private String author;
     private String nickname;
+    @TableField(exist = false)
+    private String avatarUrl;
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createTime;
     private String preview;
     private String content;
     private String annexUrl;
-    private Long starCount;
     private Long targetLetterId;
     private String targetUsername;
-    private Long commentCount;
 
 }

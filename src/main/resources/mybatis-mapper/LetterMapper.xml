@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.testdb.demo.mapper.letter.LetterMapper">
+
+    <select id="getById" resultType="com.testdb.demo.entity.letter.Letter">
+        SELECT letter.id, letter_type,
+        author, nickname, create_time,
+        content, annex_url, target_letter_id,
+        target_username, avatar.url
+        FROM letter
+        LEFT JOIN avatar ON letter.author = avatar.username
+        WHERE letter.id = #{id}
+    </select>
+
+    <select id="getRandomLetter" resultType="com.testdb.demo.entity.letter.Letter">
+        SELECT letter.id, author, nickname, content, avatar.url
+        FROM letter
+        LEFT JOIN avatar ON letter.author = avatar.username
+        WHERE letter.id = #{index}
+        AND letter_type = #{letterType}
+    </select>
+
+</mapper>

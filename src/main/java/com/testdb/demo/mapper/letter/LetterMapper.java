@@ -9,4 +9,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface LetterMapper extends BaseMapper<Letter> {
 
+    Letter getById(Long id);
+
+    Letter getRandomLetter(int index, String letterType);
+
 }

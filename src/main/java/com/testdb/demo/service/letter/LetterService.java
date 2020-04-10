@@ -28,8 +28,8 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
     UserService userService;
 
     @SneakyThrows
-    public Letter getLetter(String id){
-        return this.getById(id);
+    public Letter getLetter(Long id){
+        return letterMapper.getById(id);
     }
 
     @SneakyThrows
@@ -44,14 +44,12 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
         int letterNum = this.count();
         while(letter == null){
             int index = random.nextInt(letterNum);
-            letter = this.getOne(new QueryWrapper<Letter>()
-                    .select("id","author", "nickname", "content", "annex_url")
-                    .eq("letter_type", letterType)
-                    .eq("id", index));
+            letter = letterMapper.getRandomLetter(index, letterType);
         }
         if(letter.getContent().length() > 80){
             letter.setContent(letter.getContent().substring(0,78)+"...");
         }
+        letter.setLetterType(letterType);
         return letter;
     }
 
