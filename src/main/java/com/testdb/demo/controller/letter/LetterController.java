@@ -41,6 +41,12 @@ public class LetterController {
         return Result.success();
     }
 
+    @GetMapping("/random")
+    public Result<Letter> getLetter(Authentication token, @RequestParam("letterType") String letterType)
+    {
+        return Result.success(ls.getRandomLetter(token, letterType));
+    }
+
     @GetMapping("/preview")
     public Result<Page<BaseLetter>> getLetterList(Principal principal,
                                                   @RequestParam(value = "index", defaultValue = "1") int index){

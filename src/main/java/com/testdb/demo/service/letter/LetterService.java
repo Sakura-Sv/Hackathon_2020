@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Random;
 
 
 @Service
@@ -34,6 +35,24 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
     @SneakyThrows
     public Boolean checkInvalidLetterId(long letterId){
         return this.getOne(new QueryWrapper<Letter>().select("id").eq("id", letterId)) == null;
+    }
+
+    @SneakyThrows
+    public Letter getRandomLetter(Authentication token, String letterType){
+        Letter letter = null;
+        Random random = new Random();
+        int letterNum = this.count();
+        while(letter == null){
+            int index = random.nextInt(letterNum);
+            letter = this.getOne(new QueryWrapper<Letter>()
+                    .select("id","author", "nickname", "content", "annex_url")
+                    .eq("letter_type", letterType)
+                    .eq("id", index));
+        }
+        if(letter.getContent().length() > 80){
+            letter.setContent(letter.getContent().substring(0,78)+"...");
+        }
+        return letter;
     }
 
     @SneakyThrows
