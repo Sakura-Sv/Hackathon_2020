@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -47,6 +48,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    public void configure(WebSecurity web) throws Exception{
+        web.ignoring().mvcMatchers("/**/*.ico","/**/*.png","/**/*.css");
+    }
+
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         // 去掉 CSRF
@@ -56,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
 
-                .mvcMatchers("/","/api/user/signup", "/api/callback/**",
+                .mvcMatchers("/", "/confirm", "/api/user/signup", "/api/callback/**",
                         "/api/test/**", "/api/user/signin", "/api/user/confirm/**",
                         "/api/address/**", "/api/user/forget")
                 .permitAll()

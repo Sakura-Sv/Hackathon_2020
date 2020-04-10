@@ -13,6 +13,7 @@ import com.testdb.demo.utils.DateTimeUtil;
 import com.testdb.demo.utils.UuidMaker;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.Authentication;
@@ -26,6 +27,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Service
+@CacheConfig(cacheNames = "UserService")
 public class UserService extends ServiceImpl<UserMapper, User> {
 
     @Autowired
@@ -71,9 +73,9 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     public void sendConfirmMessage(User user) {
 
         String to = "1204736871@qq.com";
-        String subject = "为" + user.getUsername() + "激活账户";
-        String context = "<a href=\"http://127.0.0.1:8080/users/confirm/?confirmCode=" + user.getConfirmCode() +
-                "\">激活请点击:" + user.getConfirmCode() + "</a>";
+        String subject = "听风: 为" + user.getUsername() + "激活账户";
+        String context = "<a href=\"https://thenebula.cn/api/confirm/?confirmCode=" + user.getConfirmCode() +
+                "\">确认激活请点击这里，如果不是您的信息烦请无视！谢谢！"+"</a>";
         emailServiceImpl.sendHtmlMail(to, subject, context);
 
     }

@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: pro
+    active: dev
 ---
 spring:
   profiles: dev
@@ -36,6 +36,8 @@ spring:
     default-encoding: UTF-8
     protocol: smtp
     from: sakura-cg@foxmail.com
+  thymeleaf:
+    cache: false
 
 mybatis-plus:
   mapper-locations: mybatis-mapper/*.xml

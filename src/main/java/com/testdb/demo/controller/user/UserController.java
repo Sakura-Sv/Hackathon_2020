@@ -15,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.security.Principal;
 
 @RestController
@@ -52,7 +55,7 @@ public class UserController {
     }
 
     @GetMapping("/confirm")
-    public Result<Void> confirmUser(@RequestParam String confirmCode){
+    public Result<Void> confirmUser(@RequestParam String confirmCode) {
         int status = us.confirmUser(confirmCode);
         switch(status){
             case 2: return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("该验证码已过期！"));
