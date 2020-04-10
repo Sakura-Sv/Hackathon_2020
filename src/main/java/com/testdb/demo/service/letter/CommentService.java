@@ -7,8 +7,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.testdb.demo.entity.letter.Comment;
 import com.testdb.demo.entity.letter.Letter;
 import com.testdb.demo.entity.user.BaseUser;
+import com.testdb.demo.entity.user.Score;
 import com.testdb.demo.mapper.letter.CommentMapper;
 import com.testdb.demo.service.message.MessageService;
+import com.testdb.demo.service.user.ScoreService;
 import com.testdb.demo.service.user.UserService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment>{
 
     @Autowired
     private MessageService messageService;
+
+    @Autowired
+    private ScoreService scoreService;
 
     @Autowired
     private LetterService letterService;
@@ -55,6 +60,7 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment>{
                         .eq("id",comment.getAid()));
 
         this.save(comment);
+        scoreService.addScore(targetLetter.getAuthor(), ScoreService.COMMENT_SCORE);
 
         messageService.sendMessage(targetLetter.getAuthor(),
                 comment.getCommenterName(),

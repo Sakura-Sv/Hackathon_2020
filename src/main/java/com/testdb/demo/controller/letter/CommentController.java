@@ -38,9 +38,9 @@ public class CommentController {
     }
 
     @PostMapping
-    public Result<Void> postComment(Authentication token, @RequestBody Comment comment){
+    public Result<Void> postComment(Authentication token, @RequestBody Comment comment) {
 
-        if(comment.getAid() == null || ls.checkInvalidLetterId(comment.getAid())){
+        if (comment.getContent() == null || comment.getAid() == null || ls.checkInvalidLetterId(comment.getAid())) {
             return Result.failure(ResultStatus.WRONG_PARAMETERS);
         }
         cs.postComment(token, comment);

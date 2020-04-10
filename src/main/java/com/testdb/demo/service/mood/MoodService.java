@@ -6,6 +6,7 @@ import com.testdb.demo.entity.mood.BaseMood;
 import com.testdb.demo.entity.mood.Mood;
 import com.testdb.demo.entity.mood.WeekMood;
 import com.testdb.demo.mapper.mood.MoodMapper;
+import com.testdb.demo.service.user.ScoreService;
 import com.testdb.demo.utils.WeekUtil;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class MoodService extends ServiceImpl<MoodMapper, Mood> {
 
     @Autowired
     private MoodMapper moodMapper;
+
+    @Autowired
+    ScoreService scoreService;
 
     @SneakyThrows
     public int addMood(Mood mood, String username){
@@ -49,6 +53,7 @@ public class MoodService extends ServiceImpl<MoodMapper, Mood> {
         mood.setMoodDate(now);
         mood.setDayOfWeek(now.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.ENGLISH));
         moodMapper.insert(mood);
+        scoreService.addScore(username, ScoreService.MOOD_SCORE);
         return 0;
     }
 

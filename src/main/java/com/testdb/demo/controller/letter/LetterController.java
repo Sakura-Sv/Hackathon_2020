@@ -36,7 +36,10 @@ public class LetterController {
     }
 
     @PostMapping
-    public Result<Void> postLetter(Authentication token, @RequestBody Letter letter){
+    public Result<Void> postLetter(Authentication token, @RequestBody Letter letter) {
+        if (letter.getContent() == null || letter.getLetterType() == null) {
+            return Result.failure(ResultStatus.WRONG_PARAMETERS);
+        }
         ls.postLetter(token, letter);
         return Result.success();
     }

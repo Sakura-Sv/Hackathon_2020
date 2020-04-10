@@ -8,6 +8,7 @@ import com.testdb.demo.entity.user.User;
 import com.testdb.demo.mapper.letter.LetterMapper;
 import com.testdb.demo.service.RedisService;
 import com.testdb.demo.service.message.MessageService;
+import com.testdb.demo.service.user.ScoreService;
 import com.testdb.demo.service.user.UserService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
 
     @Autowired
     RedisService redisService;
+
+    @Autowired
+    ScoreService scoreService;
 
     @SneakyThrows
     public Letter getLetter(Long id){
@@ -86,6 +90,7 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
         }
         letter.setCreateTime(LocalDateTime.now());
         this.save(letter);
+        scoreService.addScore(user.getUsername(), ScoreService.POST_LETTER_SCORE);
 
     }
 

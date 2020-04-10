@@ -29,12 +29,18 @@ public class MoodController {
 
     @PostMapping
     public Result<Void> addMood(Principal principal,
-                                @RequestBody Mood mood){
+                                @RequestBody Mood mood) {
+        if (mood.getDescription() == null || mood.getMoodType() == null) {
+            return Result.failure(ResultStatus.WRONG_PARAMETERS);
+        }
         int status = ms.addMood(mood, principal.getName());
-        switch(status){
-            case 2: return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("你的一句话太长啦！"));
-            case 1: return Result.failure(ResultStatus.FAILURE.setMessage("今天已经记录过心情啦！"));
-            default: return Result.success();
+        switch (status) {
+            case 2:
+                return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("你的一句话太长啦！"));
+            case 1:
+                return Result.failure(ResultStatus.FAILURE.setMessage("今天已经记录过心情啦！"));
+            default:
+                return Result.success();
         }
     }
 

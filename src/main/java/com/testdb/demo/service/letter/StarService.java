@@ -5,6 +5,7 @@ import com.testdb.demo.entity.letter.Letter;
 import com.testdb.demo.entity.user.BaseUser;
 import com.testdb.demo.service.RedisService;
 import com.testdb.demo.service.message.MessageService;
+import com.testdb.demo.service.user.ScoreService;
 import com.testdb.demo.service.user.UserService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class StarService {
     @Autowired
     private LetterService letterService;
 
+    @Autowired
+    ScoreService scoreService;
+
     public static final Integer STAR_TYPE = 1;
 
     @SneakyThrows
@@ -36,6 +40,8 @@ public class StarService {
 
             Letter targetLetter = letterService.getOne(new QueryWrapper<Letter>()
                     .select("preview", "letter_type").eq("id", aid));
+
+            scoreService.addScore(targetUsername, ScoreService.STAR_SCORE);
 
             messageService.sendMessage(targetUsername,
                     user.getUsername(),
@@ -72,13 +78,4 @@ public class StarService {
         throw new Exception("Wrong Parameters");
     }
 
-    public String getStarLevel(String letterType) throws Exception {
-        switch(letterType) {
-            // 前缀1指幸运信
-            // 前缀2指解忧信
-            case("1") : return "11";
-            case("2") : return "21";
-        }
-        throw new Exception("错误的Letter Type");
-    }
 }
