@@ -6,6 +6,7 @@ import com.testdb.demo.entity.letter.Letter;
 import com.testdb.demo.entity.user.BaseUser;
 import com.testdb.demo.entity.user.User;
 import com.testdb.demo.mapper.letter.LetterMapper;
+import com.testdb.demo.service.RedisService;
 import com.testdb.demo.service.message.MessageService;
 import com.testdb.demo.service.user.UserService;
 import lombok.SneakyThrows;
@@ -27,6 +28,9 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
     @Autowired
     UserService userService;
 
+    @Autowired
+    RedisService redisService;
+
     @SneakyThrows
     public Letter getLetter(Long id){
         return letterMapper.getById(id);
@@ -39,17 +43,22 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
 
     @SneakyThrows
     public Letter getRandomLetter(Authentication token, String letterType){
+        BaseUser user = UserService.t2b(token);
         Letter letter = null;
         Random random = new Random();
         int letterNum = this.count();
         while(letter == null){
-            int index = random.nextInt(letterNum);
+            Integer index = random.nextInt(letterNum);
+            if(redisService.hGet("RandomLetter", user.getUsername())==index){
+                continue;
+            }
             letter = letterMapper.getRandomLetter(index, letterType);
         }
         if(letter.getContent().length() > 80){
             letter.setContent(letter.getContent().substring(0,78)+"...");
         }
         letter.setLetterType(letterType);
+        redisService.hSet("RandomLetter", user.getUsername(), letter.getId());
         return letter;
     }
 

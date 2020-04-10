@@ -44,6 +44,9 @@ public class LetterController {
     @GetMapping("/random")
     public Result<Letter> getLetter(Authentication token, @RequestParam("letterType") String letterType)
     {
+        if(!letterType.equals("1") && !letterType.equals("2")){
+            return Result.failure(ResultStatus.WRONG_PARAMETERS);
+        }
         return Result.success(ls.getRandomLetter(token, letterType));
     }
 
