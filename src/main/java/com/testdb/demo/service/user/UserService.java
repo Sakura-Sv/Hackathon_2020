@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -81,7 +82,11 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     @SneakyThrows
     @Cacheable(key = "#root.method.name+#username", unless = "#username==null")
     public BaseUser getBaseInfo(String username){
-        return userMapper.selectUserBaseInfo(username);
+        BaseUser user = userMapper.selectUserBaseInfo(username);
+        if(user.getBirthday()!=null) {
+            user.setAge(LocalDate.now().getYear()-user.getBirthday().getYear());
+        }
+        return user;
     }
 
     @Transactional

@@ -1,5 +1,6 @@
 package com.testdb.demo.entity.user;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -22,6 +23,8 @@ public class BaseUser {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     private LocalDate birthday;
+    @TableField(exist = false)
+    private long age;
     private String sex;
     private String description;
     private String nickname;
