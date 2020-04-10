@@ -56,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
 
-                .mvcMatchers("/api/user/signup", "/api/callback/**",
+                .mvcMatchers("/","/api/user/signup", "/api/callback/**",
                         "/api/test/**", "/api/user/signin", "/api/user/confirm/**",
                         "/api/address/**", "/api/user/forget")
                 .permitAll()
@@ -72,7 +72,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .formLogin()  //开启登录
-                .loginPage("/api/user/signin")
+                .loginPage("/")
                 .successHandler(authenticationSuccessHandler) // 登录成功
                 .failureHandler(authenticationFailureHandler) // 登录失败
                 .permitAll()
