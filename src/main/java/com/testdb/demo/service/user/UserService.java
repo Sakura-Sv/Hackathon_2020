@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.testdb.demo.entity.user.Avatar;
-import com.testdb.demo.entity.user.BaseUser;
-import com.testdb.demo.entity.user.ConfirmCode;
-import com.testdb.demo.entity.user.User;
+import com.testdb.demo.entity.user.*;
 import com.testdb.demo.mapper.user.AddressMapper;
 import com.testdb.demo.mapper.user.AvatarMapper;
 import com.testdb.demo.mapper.user.UserMapper;
@@ -44,13 +41,13 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     private RedisTemplate redisTemplate;
 
     @Autowired
-    private StringRedisTemplate stringRedisTemplate;
-
-    @Autowired
     private EmailServiceImpl emailServiceImpl;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ScoreService scoreService;
 
     @Transactional
     @SneakyThrows
@@ -66,6 +63,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         Integer userId = userMapper.selectIdByUsername(user.getUsername());
         userMapper.createUser(userId.toString(),"2");
         avatarMapper.insert(new Avatar(user.getUsername()));
+        scoreService.save(new Score(user.getUsername(), ScoreService.BASE_SCORE));
         sendConfirmMessage(user);
     }
 
@@ -92,7 +90,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         //2 验证码已过期 1 用户已激活 0 成功
 
         User user = userMapper.selectOne(new QueryWrapper<User>().eq("confirm_code", confirmCode));
-        if(Duration.between(LocalDate.now(), user.getCreatedTime()).toDays()<=1){
+        if(Duration.between(LocalDateTime.now(), user.getCreatedTime()).toDays()>=1){
             return 2;
         }
         if( !user.getEnable() ){

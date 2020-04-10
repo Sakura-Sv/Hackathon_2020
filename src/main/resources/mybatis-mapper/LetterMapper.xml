@@ -15,7 +15,7 @@
     </select>
 
     <select id="getRandomLetter" resultType="com.testdb.demo.entity.letter.Letter">
-        SELECT letter.id, author, nickname, content, avatar.url
+        SELECT letter.id, author, nickname, content, avatar.url AS avatarUrl
         FROM letter
         LEFT JOIN avatar ON letter.author = avatar.username
         WHERE letter.id = #{index}
