@@ -15,5 +15,4 @@ public interface CommentMapper extends BaseMapper<Comment> {
 
     List<Comment> getCommentList(long aid, Page<Comment> pagination);
 
-//    List<Reply> getReplyList();
 }

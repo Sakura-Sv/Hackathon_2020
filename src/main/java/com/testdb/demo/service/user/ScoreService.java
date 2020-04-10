@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class ScoreService extends ServiceImpl<ScoreMapper, Score> {
 
     @Autowired
-    ScoreMapper scoreMapper;
+    private ScoreMapper scoreMapper;
 
     public static final long BASE_SCORE = 1;
 

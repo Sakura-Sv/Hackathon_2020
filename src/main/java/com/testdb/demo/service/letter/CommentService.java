@@ -25,9 +25,6 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment>{
     private MessageService messageService;
 
     @Autowired
-    private CommentMapper commentMapper;
-
-    @Autowired
     private LetterService letterService;
 
     private static final Integer COMMENT_TYPE = 2;

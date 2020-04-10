@@ -18,7 +18,7 @@ import java.util.List;
 public class MessageService extends ServiceImpl<MessageMapper, Message> {
 
     @Autowired
-    RedisService redisService;
+    private RedisService redisService;
 
     // 单页信息数
     private static final int SIZE = 20;
