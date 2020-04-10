@@ -2,14 +2,22 @@ package com.testdb.demo.service;
 
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.Cursor;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 @Service
 public class RedisService {
@@ -77,6 +85,21 @@ public class RedisService {
                 redisTemplate.delete(CollectionUtils.arrayToList(key));
             }
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public Set<Object> scan(String pattern) {
+        Set<Object> execute = (Set<Object>) redisTemplate.execute((RedisCallback<Set<Object>>) connection -> {
+
+            Set<Object> binaryKeys = new HashSet<>();
+
+            Cursor<byte[]> cursor = connection.scan( new ScanOptions.ScanOptionsBuilder().match(pattern).count(1000).build());
+            while (cursor.hasNext()) {
+                binaryKeys.add(new String(cursor.next()));
+            }
+            return binaryKeys;
+        });
+        return execute;
     }
 
     //============================String=============================

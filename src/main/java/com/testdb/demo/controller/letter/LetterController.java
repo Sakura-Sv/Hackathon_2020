@@ -11,6 +11,7 @@ import com.testdb.demo.utils.QiniuUtil;
 import com.testdb.demo.utils.response.Result;
 import com.testdb.demo.utils.response.ResultStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +32,7 @@ public class LetterController {
     BaseLetterService bls;
 
     @GetMapping
+    @Cacheable(value="LetterController", key = "#root.method.name+#id", unless = "#id==null")
     public Result<Letter> getLetter(@RequestParam("id") Long id){
         return Result.success(ls.getLetter(id));
     }
@@ -48,7 +50,7 @@ public class LetterController {
     public Result<Letter> getLetter(Authentication token, @RequestParam("letterType") String letterType)
     {
         if(!letterType.equals("1") && !letterType.equals("2")){
-            return Result.failure(ResultStatus.WRONG_PARAMETERS);
+            return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("类型不正确！"));
         }
         return Result.success(ls.getRandomLetter(token, letterType));
     }

@@ -12,8 +12,12 @@ import com.testdb.demo.mapper.letter.CommentMapper;
 import com.testdb.demo.service.message.MessageService;
 import com.testdb.demo.service.user.ScoreService;
 import com.testdb.demo.service.user.UserService;
+import com.testdb.demo.utils.CacheUtil;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +25,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 
 @Service
+@CacheConfig(cacheNames = "CommentService")
 public class CommentService extends ServiceImpl<CommentMapper, Comment>{
 
     @Autowired
@@ -30,17 +35,25 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment>{
     private ScoreService scoreService;
 
     @Autowired
+    private CommentMapper commentMapper;
+
+    @Autowired
     private LetterService letterService;
+
+    @Autowired
+    private CacheUtil cacheUtil;
 
     private static final Integer COMMENT_TYPE = 2;
 
     @SneakyThrows
+    @Cacheable(key = "#root.method.name+#commentId", unless = "#commentId==null")
     public Boolean checkInvalidCommentId(long commentId){
-        return this.getOne(new QueryWrapper<Comment>().select("id").eq("id", commentId)) == null;
+        return commentMapper.selectOne(new QueryWrapper<Comment>().select("id").eq("id", commentId)) == null;
     }
 
     @SneakyThrows
-    public Page<Comment> getCommentList( int index, long aid){
+    @Cacheable(key = "#root.method.name+#aid+'end'+#index", unless = "#aid==null")
+    public Page<Comment> getCommentList(int index, long aid){
         Page<Comment> page = new Page<>(index, 20);
         return page.setRecords(this.baseMapper.getCommentList(aid, page));
     }
@@ -59,8 +72,10 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment>{
                         .select("author", "letter_type", "preview")
                         .eq("id",comment.getAid()));
 
-        this.save(comment);
+        commentMapper.insert(comment);
         scoreService.addScore(targetLetter.getAuthor(), ScoreService.COMMENT_SCORE);
+
+        cacheUtil.cleanMoodList(comment.getAid().toString());
 
         messageService.sendMessage(targetLetter.getAuthor(),
                 comment.getCommenterName(),

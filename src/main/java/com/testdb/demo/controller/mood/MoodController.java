@@ -7,6 +7,7 @@ import com.testdb.demo.service.mood.MoodService;
 import com.testdb.demo.utils.response.AjaxResponseBody;
 import com.testdb.demo.utils.response.Result;
 import com.testdb.demo.utils.response.ResultStatus;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,9 +29,12 @@ public class MoodController {
     }
 
     @PostMapping
+    @SneakyThrows
     public Result<Void> addMood(Principal principal,
                                 @RequestBody Mood mood) {
-        if (mood.getDescription() == null || mood.getMoodType() == null) {
+        if (mood.getDescription() == null ||
+                mood.getMoodType() == null ||
+                ms.checkInvalidMoodType(mood.getMoodType())) {
             return Result.failure(ResultStatus.WRONG_PARAMETERS);
         }
         int status = ms.addMood(mood, principal.getName());

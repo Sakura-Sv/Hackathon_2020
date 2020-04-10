@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.testdb.demo.entity.QiniuCallbackMessage;
 import com.testdb.demo.entity.user.User;
+import com.testdb.demo.service.RedisService;
 import com.testdb.demo.service.user.UserService;
 import com.testdb.demo.utils.QiniuUtil;
 import lombok.SneakyThrows;
@@ -16,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -30,6 +32,9 @@ public class TestController {
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
+
+    @Autowired
+    private RedisService redisService;
 
     @Autowired
     private UserService us;
@@ -48,9 +53,12 @@ public class TestController {
 
     @GetMapping("/url")
     public String getUrl(Authentication principal) {
-        System.out.println(principal.getPrincipal());
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        return null;
+        Set<Object> results = redisService.scan("HearWind:MoodServicegetMoodList*");
+        for(Object result: results){
+            System.out.println(result.toString());
+        }
+        System.out.println();
+        return "0";
     }
 
     @SneakyThrows

@@ -10,6 +10,9 @@ import com.testdb.demo.service.user.ScoreService;
 import com.testdb.demo.utils.WeekUtil;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -18,6 +21,7 @@ import java.util.*;
 
 
 @Service
+@CacheConfig(cacheNames = "MoodService")
 public class MoodService extends ServiceImpl<MoodMapper, Mood> {
 
     @Autowired
@@ -26,7 +30,11 @@ public class MoodService extends ServiceImpl<MoodMapper, Mood> {
     @Autowired
     ScoreService scoreService;
 
+    private static final Integer MAX_MOOD_TYPE = 7;
+    private static final Integer MIN_MOOD_TYPE = 1;
+
     @SneakyThrows
+    @CacheEvict(key = "'getMoodList'+#username")
     public int addMood(Mood mood, String username){
 
         // 2 心情描述过长 1 今天已经填写过了 0 成功
@@ -70,6 +78,7 @@ public class MoodService extends ServiceImpl<MoodMapper, Mood> {
     }
 
     @SneakyThrows
+    @Cacheable(key = "#root.method.name+#username", unless = "#username==null")
     public Map<String, WeekMood> getMoodList(String username){
         LocalDate beginTime = LocalDate.now().minusDays(6);
         List<Map<String, Object>> oldList = this.listMaps(new QueryWrapper<Mood>()
@@ -111,5 +120,15 @@ public class MoodService extends ServiceImpl<MoodMapper, Mood> {
             return null;
         }
         return randomize(oldList);
+    }
+
+    public Boolean checkInvalidMoodType(String moodType) {
+        try{
+            int type = Integer.parseInt(moodType);
+            return type < MIN_MOOD_TYPE || type > MAX_MOOD_TYPE;
+        }
+        catch (Exception e){
+            return true;
+        }
     }
 }

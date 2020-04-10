@@ -13,16 +13,14 @@ import com.testdb.demo.utils.DateTimeUtil;
 import com.testdb.demo.utils.UuidMaker;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.*;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -81,6 +79,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     }
 
     @SneakyThrows
+    @Cacheable(key = "#root.method.name+#username", unless = "#username==null")
     public BaseUser getBaseInfo(String username){
         return userMapper.selectUserBaseInfo(username);
     }
@@ -93,6 +92,9 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
         User user = userMapper.selectOne(new QueryWrapper<User>().eq("confirm_code", confirmCode));
         if(Duration.between(LocalDateTime.now(), user.getCreatedTime()).toDays()>=1){
+            if(!user.getEnable()){
+                this.remove(new UpdateWrapper<User>().eq("username", user.getUsername()));
+            }
             return 2;
         }
         if( !user.getEnable() ){
@@ -104,12 +106,14 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     }
 
     @SneakyThrows
+    @Cacheable(key = "#root.method.name+#username", unless = "#username==null")
     public Boolean checkInvalidUser(String username){
-        return getOne(new QueryWrapper<User>().select("id").eq("username", username)) == null;
+        return userMapper.selectOne(new QueryWrapper<User>().select("id").eq("username", username)) == null;
     }
 
     @Transactional
     @SneakyThrows
+    @CacheEvict(key="'getBaseInfo'+#username")
     public void updateUserInfo(String username,
                                JSONObject jsonParam){
 
@@ -120,7 +124,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         String address = jsonParam.getString("address");
         String foreignAddress = jsonParam.getString("foreignAddress");
 
-        User user = this.getOne(new QueryWrapper<User>().eq("username",username));
+        User user = userMapper.selectOne(new QueryWrapper<User>().eq("username",username));
 
         if(sex != null) {
             user.setSex(sex);

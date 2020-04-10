@@ -7,6 +7,9 @@ import com.testdb.demo.mapper.message.MessageMapper;
 import com.testdb.demo.service.RedisService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
+@CacheConfig(cacheNames = "MessageService")
 public class MessageService extends ServiceImpl<MessageMapper, Message> {
 
     @Autowired
@@ -23,6 +27,7 @@ public class MessageService extends ServiceImpl<MessageMapper, Message> {
     // 单页信息数
     private static final int SIZE = 20;
 
+    @CacheEvict(key = "'getMessageList'+#username")
     public void sendMessage(String targetUsername,
                             String username,
                             String avatarUrl,
@@ -46,6 +51,7 @@ public class MessageService extends ServiceImpl<MessageMapper, Message> {
     }
 
     @SneakyThrows
+    @Cacheable(key = "#root.method.name+#username", unless = "#username==null")
     public MessagePage getMessageList(String username, int index)  {
 
         if(index<0){
@@ -68,6 +74,14 @@ public class MessageService extends ServiceImpl<MessageMapper, Message> {
         return messagePage;
     }
 
+    /**
+     * 工具方法  用于获取信息列表   还需要将Object转化为Message
+     * @param messagePage
+     * @param username
+     * @param index
+     * @return
+     * @throws Exception
+     */
     public List<Object> getOldList(MessagePage messagePage, String username, int index) throws Exception {
 
         List<Object> list;
@@ -76,17 +90,17 @@ public class MessageService extends ServiceImpl<MessageMapper, Message> {
         messagePage.setSize(SIZE);
         messagePage.setPages(getPageNum(messageNum));
 
-        if(messageNum <= 20){
+        if(messageNum <= SIZE){
             list = redisService.lGet(username, 0, -1);
             messagePage.setCurrentPage(1);
         }
-        else if(messageNum < index*20){
-            long begin = messageNum/20*20;
+        else if(messageNum < index*SIZE){
+            long begin = messageNum/SIZE*SIZE;
             list = redisService.lGet(username, begin, -1);
             messagePage.setCurrentPage(messagePage.getPages());
         }
         else{
-            list = redisService.lGet(username, (index -1) * 20, index*20);
+            list = redisService.lGet(username, (index -1) * SIZE, index*SIZE);
             messagePage.setCurrentPage(index);
         }
         return list;

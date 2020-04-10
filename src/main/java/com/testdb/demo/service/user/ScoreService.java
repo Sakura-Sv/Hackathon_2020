@@ -7,10 +7,14 @@ import com.testdb.demo.entity.user.BaseUser;
 import com.testdb.demo.entity.user.Score;
 import com.testdb.demo.mapper.user.ScoreMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
+@CacheConfig(cacheNames = "ScoreService")
 public class ScoreService extends ServiceImpl<ScoreMapper, Score> {
 
     @Autowired
@@ -23,6 +27,7 @@ public class ScoreService extends ServiceImpl<ScoreMapper, Score> {
 
     public static final long BASE_SCORE = 1;
 
+    @Cacheable(key = "#root.method.name+#username", unless = "#username==null")
     public Integer getScore(Authentication token){
         BaseUser user = UserService.t2b(token);
         Score score = this.getOne(new QueryWrapper<Score>().select("score").eq("username", user.getUsername()));
@@ -38,6 +43,7 @@ public class ScoreService extends ServiceImpl<ScoreMapper, Score> {
         return 1;
     }
 
+    @CacheEvict(key = "#root.method.name+#username")
     public void addScore(String username, Integer score) throws Exception {
         if(score==null){
             throw new Exception("Wrong Score!");
