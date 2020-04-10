@@ -1,6 +1,7 @@
 package com.testdb.demo.entity.user;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +16,8 @@ public class Score {
     private long id;
     private String username;
     private long score;
+    @TableField(exist = false)
+    private int level;
 
     public Score(String username, long score){
         this.username = username;

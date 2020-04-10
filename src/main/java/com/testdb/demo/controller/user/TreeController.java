@@ -1,5 +1,6 @@
 package com.testdb.demo.controller.user;
 
+import com.testdb.demo.entity.user.Score;
 import com.testdb.demo.service.user.ScoreService;
 import com.testdb.demo.utils.response.AjaxResponseBody;
 import com.testdb.demo.utils.response.Result;
@@ -17,9 +18,9 @@ public class TreeController {
     @Autowired
     ScoreService scoreService;
 
-//    @GetMapping
-//    public Result<Tree> getTree(Authentication token){
-//        return Result.success(scoreService.getTree(token));
-//    }
+    @GetMapping
+    public Result<Integer> getScore(Authentication token){
+        return Result.success(scoreService.getScore(token));
+    }
 
 }

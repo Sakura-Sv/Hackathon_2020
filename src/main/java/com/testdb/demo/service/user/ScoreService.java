@@ -17,10 +17,20 @@ public class ScoreService extends ServiceImpl<ScoreMapper, Score> {
 
     public static final long BASE_SCORE = 1;
 
-//    public Score getTree(Authentication token){
-//        BaseUser user = UserService.t2b(token);
-//
-//    }
+    public Integer getScore(Authentication token){
+        BaseUser user = UserService.t2b(token);
+        Score score = this.getOne(new QueryWrapper<Score>().select("score").eq("username", user.getUsername()));
+        return calculateLevel(score.getScore());
+    }
+
+    public Integer calculateLevel(long score) {
+        if (score > 1200) {
+            return 3;
+        } else if (score > 400) {
+            return 2;
+        }
+        return 1;
+    }
 
 }
 
