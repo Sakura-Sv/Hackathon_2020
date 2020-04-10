@@ -15,4 +15,17 @@ public class WeekUtil {
         return null;
     }
 
+    public static String next(String currentDay){
+        switch(currentDay){
+            case "Sun": return "Mon";
+            case "Mon": return "Tue";
+            case "Tue": return "Wed";
+            case "Wed": return "Thu";
+            case "Thu": return "Fri";
+            case "Fri": return "Sat";
+            case "Sat": return "Sun";
+        }
+        return null;
+    }
+
 }
