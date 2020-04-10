@@ -74,7 +74,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
         String to = "1204736871@qq.com";
         String subject = "听风: 为" + user.getUsername() + "激活账户";
-        String context = "<a href=\"https://thenebula.cn/api/confirm/?confirmCode=" + user.getConfirmCode() +
+        String context = "<a href=\"https://thenebula.cn/confirm/?confirmCode=" + user.getConfirmCode() +
                 "\">确认激活请点击这里，如果不是您的信息烦请无视！谢谢！"+"</a>";
         emailServiceImpl.sendHtmlMail(to, subject, context);
 
