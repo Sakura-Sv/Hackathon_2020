@@ -19,6 +19,7 @@
         FROM letter
         LEFT JOIN avatar ON letter.author = avatar.username
         WHERE letter.id = #{index}
+        AND letter.author != #{username}
         AND letter_type = #{letterType}
     </select>
 

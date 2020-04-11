@@ -56,7 +56,7 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
             if(redisService.hGet("RandomLetter", user.getUsername())==index){
                 continue;
             }
-            letter = letterMapper.getRandomLetter(index, letterType);
+            letter = letterMapper.getRandomLetter( index, user.getUsername(), letterType);
         }
         if(letter.getContent().length() > 80){
             letter.setContent(letter.getContent().substring(0,78)+"...");
