@@ -11,6 +11,6 @@ public interface LetterMapper extends BaseMapper<Letter> {
 
     Letter getById(Long id);
 
-    Letter getRandomLetter(Integer index, String letterType);
+    Letter getRandomLetter(Long index, String letterType);
 
 }

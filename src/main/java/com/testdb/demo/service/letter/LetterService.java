@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 
@@ -46,20 +48,49 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
     }
 
     @SneakyThrows
+    public List<Long> getSameLetterTypeList(String letterType){
+        List<Letter> letters = letterMapper.selectList(new QueryWrapper<Letter>()
+                .select("id")
+                .ne("letter_type", letterType));
+        List<Long> results = new ArrayList<>();
+        for(Letter letter: letters){
+            results.add(letter.getId());
+        }
+        return results;
+    }
+
+    @SneakyThrows
+    public List<Long> getMyLetterList(String username){
+        List<Letter> letters = letterMapper.selectList(new QueryWrapper<Letter>()
+                .select("id")
+                .eq("author", username));
+        List<Long> results = new ArrayList<>();
+        for(Letter letter: letters){
+            results.add(letter.getId());
+        }
+        return results;
+    }
+
+    @SneakyThrows
     public Letter getRandomLetter(Authentication token, String letterType){
         BaseUser user = UserService.t2b(token);
         Letter letter = null;
         Random random = new Random();
         int letterNum = this.count();
+
+        List<Long> ids = new ArrayList<>();
+        ids.addAll(getSameLetterTypeList(letterType));
+        ids.addAll(getMyLetterList(user.getUsername()));
+
         while(letter == null){
-            Integer index = random.nextInt(letterNum)+1;
+            Long index = (long)(random.nextInt(letterNum)+1);
+            if(ids.contains(index)){
+                continue;
+            }
             if(redisService.hGet("RandomLetter", user.getUsername())==index){
                 continue;
             }
             letter = letterMapper.getRandomLetter(index, letterType);
-            if(letter.getAuthor().equals(user.getUsername())) {
-                letter = null;
-            }
         }
         if(letter.getContent().length() > 80){
             letter.setContent(letter.getContent().substring(0,78)+"...");
