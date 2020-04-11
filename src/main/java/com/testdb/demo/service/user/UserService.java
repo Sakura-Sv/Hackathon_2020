@@ -195,6 +195,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     public Boolean getConfirmCode(String username){
         String confirmCode = UuidMaker.randomCode();
 
+        System.out.println("here");
         if(checkInvalidUser(username)){
             return false;
         }
