@@ -106,7 +106,7 @@ public class UserController {
 
     @GetMapping("/forget")
     public Result<Void> getConfirmCode(@RequestParam String username){
-        if( us.getConfirmCode(username)){
+        if( !us.getConfirmCode(username)){
             return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("没有该用户哦！"));
         }
         return Result.success();
