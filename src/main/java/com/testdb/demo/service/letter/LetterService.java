@@ -11,6 +11,7 @@ import com.testdb.demo.service.user.UserService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -39,16 +40,33 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
     @Autowired
     ScoreService scoreService;
 
+    /**
+     * 获取一封信的信息
+     * @param id
+     * @return
+     */
     @SneakyThrows
     public Letter getLetter(Long id){
         return letterMapper.getById(id);
     }
 
+    /**
+     * 检查信的有效性
+     * @param letterId
+     * @return
+     */
     @SneakyThrows
+    @Cacheable(key = "#root.method.name+#letterId", unless = "#letterId==null")
     public Boolean checkInvalidLetterId(long letterId){
         return this.getOne(new QueryWrapper<Letter>().select("id").eq("id", letterId)) == null;
     }
 
+    /**
+     * 随机获取一封信
+     * @param token 用户信息
+     * @param letterType 信的类型
+     * @return
+     */
     @SneakyThrows
     public Letter getRandomLetter(Authentication token, String letterType){
         BaseUser user = UserService.t2b(token);
@@ -78,6 +96,11 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
         return letter;
     }
 
+    /**
+     * 发送一封信
+     * @param token
+     * @param letter
+     */
     @SneakyThrows
     public void postLetter(Authentication token, Letter letter){
         BaseUser user = UserService.t2b(token);

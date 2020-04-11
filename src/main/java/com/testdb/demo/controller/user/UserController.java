@@ -58,6 +58,7 @@ public class UserController {
     public Result<Void> confirmUser(@RequestParam String confirmCode) {
         int status = us.confirmUser(confirmCode);
         switch(status){
+            case 3: return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("无效的验证码！"));
             case 2: return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("该验证码已过期！"));
             case 1: return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("该账号已被激活！"));
             default: return Result.success();
@@ -104,7 +105,9 @@ public class UserController {
 
     @GetMapping("/forget")
     public Result<Void> getConfirmCode(@RequestParam String username){
-        us.getConfirmCode(username);
+        if( us.getConfirmCode(username)){
+            return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("没有该用户哦！"));
+        }
         return Result.success();
     }
 

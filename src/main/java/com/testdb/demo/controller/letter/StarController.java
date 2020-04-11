@@ -1,6 +1,7 @@
 package com.testdb.demo.controller.letter;
 
 import com.alibaba.fastjson.JSONObject;
+import com.testdb.demo.service.letter.LetterService;
 import com.testdb.demo.service.letter.StarService;
 import com.testdb.demo.utils.response.AjaxResponseBody;
 import com.testdb.demo.utils.response.Result;
@@ -16,6 +17,9 @@ public class StarController {
 
     @Autowired
     StarService ss;
+
+    @Autowired
+    LetterService ls;
 
     /**
      * 点赞
@@ -40,6 +44,9 @@ public class StarController {
      */
     @GetMapping("/count")
     public Result<Long> star(@RequestParam long aid ){
+        if(ls.checkInvalidLetterId(aid)){
+            return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("不存在这封信！"));
+        }
         return Result.success(ss.countStar(aid));
     }
 

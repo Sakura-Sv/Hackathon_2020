@@ -114,6 +114,9 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         //2 验证码已过期 1 用户已激活 0 成功
 
         User user = userMapper.selectOne(new QueryWrapper<User>().eq("confirm_code", confirmCode));
+        if(user == null){
+            return 3;
+        }
         if(Duration.between(LocalDateTime.now(), user.getCreatedTime()).toDays()>=1){
             if(!user.getEnable()){
                 this.remove(new UpdateWrapper<User>().eq("username", user.getUsername()));
@@ -183,13 +186,17 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     }
 
     /**
-     * 获取激活码
+     * 获取找回密码的验证码
      * @param username
      */
     @SneakyThrows
     @SuppressWarnings("unchecked")
-    public void getConfirmCode(String username){
+    public Boolean getConfirmCode(String username){
         String confirmCode = UuidMaker.randomCode();
+
+        if(checkInvalidUser(username)){
+            return false;
+        }
 
         redisTemplate.opsForHash()
                 .put("confirmCode", username,
@@ -200,6 +207,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         String context = "<P>您的验证码为： <b>" + confirmCode + "<b/></P>";
 
         emailServiceImpl.sendHtmlMail(to, subject, context);
+        return true;
     }
 
     /**

@@ -39,6 +39,9 @@ public class LetterController {
     @GetMapping
     @Cacheable(value="LetterController", key = "#root.method.name+#id", unless = "#id==null")
     public Result<Letter> getLetter(@RequestParam("id") Long id){
+        if(ls.checkInvalidLetterId(id)){
+            Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("不存在这封信！"));
+        }
         return Result.success(ls.getLetter(id));
     }
 
@@ -49,7 +52,7 @@ public class LetterController {
      */
     @PostMapping
     public Result<Void> postLetter(Authentication token, @RequestBody Letter letter) {
-        if (letter.getContent() == null || letter.getLetterType() == null) {
+        if (letter == null || letter.getContent() == null || letter.getLetterType() == null) {
             return Result.failure(ResultStatus.WRONG_PARAMETERS);
         }
         ls.postLetter(token, letter);
