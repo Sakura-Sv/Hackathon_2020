@@ -33,7 +33,7 @@ public class QiniuUtil {
     static String key = null;
     static long expireSeconds = 600L;
 
-    static String callbackUrl = "http://39.107.239.89/api/callback/avatar";
+    static String callbackUrl = "https://thenebula.cn/api/callback/avatar";
     static String callbackUrlTest = "http://9fpht5.natappfree.cc/api/callback/avatar";
     static String callbackBodyType = "application/json";
 

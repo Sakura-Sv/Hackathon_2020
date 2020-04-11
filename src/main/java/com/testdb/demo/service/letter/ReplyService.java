@@ -23,9 +23,6 @@ import java.time.LocalDateTime;
 public class ReplyService extends ServiceImpl<ReplyMapper, Reply> {
 
     @Autowired
-    private ReplyMapper replyMapper;
-
-    @Autowired
     private CommentService commentService;
 
     @Autowired

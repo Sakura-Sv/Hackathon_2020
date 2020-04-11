@@ -18,6 +18,9 @@ public class AvatarService extends ServiceImpl<AvatarMapper, Avatar> {
 
     @SneakyThrows
     public void uploadAvatarTest(String username){
+        /**
+         * 测试用
+         */
         StringMap policy = new StringMap();
         policy.put("callbackUrl", "http://9fpht5.natappfree.cc/api/callback/avatar");
         policy.put("callbackBody",
@@ -32,7 +35,7 @@ public class AvatarService extends ServiceImpl<AvatarMapper, Avatar> {
     @SneakyThrows
     public String uploadAvatar(String username){
         StringMap policy = new StringMap();
-        policy.put("callbackUrl", "http://39.107.239.89/api/callback/avatar");
+        policy.put("callbackUrl", "https://thenebula.cn/api/callback/avatar");
         policy.put("callbackBody",
                 "{\"username\":" + "\""+username+"\"," + "\"key\":\"$(key)\",\"hash\":\"$(etag)\",\"bucket\":\"$(bucket)\"}");
         policy.put("callbackBodyType", "application/json");

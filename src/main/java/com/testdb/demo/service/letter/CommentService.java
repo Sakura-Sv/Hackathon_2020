@@ -1,13 +1,11 @@
 package com.testdb.demo.service.letter;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.testdb.demo.entity.letter.Comment;
 import com.testdb.demo.entity.letter.Letter;
 import com.testdb.demo.entity.user.BaseUser;
-import com.testdb.demo.entity.user.Score;
 import com.testdb.demo.mapper.letter.CommentMapper;
 import com.testdb.demo.service.message.MessageService;
 import com.testdb.demo.service.user.ScoreService;
@@ -16,7 +14,6 @@ import com.testdb.demo.utils.CacheUtil;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;

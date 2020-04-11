@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class BaseLetterService extends ServiceImpl<BaseLetterMapper, BaseLetter> {
 
+
     public Page<BaseLetter> getBaseLetterList(String username, int index){
         return this.page(new Page<>(index,5),new QueryWrapper<BaseLetter>()
                 .select("id", "letter_type", "preview", "create_time")
@@ -17,4 +18,5 @@ public class BaseLetterService extends ServiceImpl<BaseLetterMapper, BaseLetter>
                 .ne("letter_type", "3")
                 .orderByDesc("create_time"));
     }
+
 }

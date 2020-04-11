@@ -4,18 +4,16 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.testdb.demo.entity.letter.Letter;
 import com.testdb.demo.entity.user.BaseUser;
-import com.testdb.demo.entity.user.User;
 import com.testdb.demo.mapper.letter.LetterMapper;
 import com.testdb.demo.service.RedisService;
-import com.testdb.demo.service.message.MessageService;
 import com.testdb.demo.service.user.ScoreService;
 import com.testdb.demo.service.user.UserService;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +21,7 @@ import java.util.Random;
 
 
 @Service
+@CacheConfig(cacheNames = "LetterService")
 public class LetterService extends ServiceImpl<LetterMapper, Letter> {
 
     @Autowired
@@ -33,6 +32,9 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
 
     @Autowired
     RedisService redisService;
+
+    @Autowired
+    LetterServiceExternal letterServiceExternal;
 
     @Autowired
     ScoreService scoreService;
@@ -48,30 +50,6 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
     }
 
     @SneakyThrows
-    public List<Long> getSameLetterTypeList(String letterType){
-        List<Letter> letters = letterMapper.selectList(new QueryWrapper<Letter>()
-                .select("id")
-                .ne("letter_type", letterType));
-        List<Long> results = new ArrayList<>();
-        for(Letter letter: letters){
-            results.add(letter.getId());
-        }
-        return results;
-    }
-
-    @SneakyThrows
-    public List<Long> getMyLetterList(String username){
-        List<Letter> letters = letterMapper.selectList(new QueryWrapper<Letter>()
-                .select("id")
-                .eq("author", username));
-        List<Long> results = new ArrayList<>();
-        for(Letter letter: letters){
-            results.add(letter.getId());
-        }
-        return results;
-    }
-
-    @SneakyThrows
     public Letter getRandomLetter(Authentication token, String letterType){
         BaseUser user = UserService.t2b(token);
         Letter letter = null;
@@ -79,8 +57,8 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
         int letterNum = this.count();
 
         List<Long> ids = new ArrayList<>();
-        ids.addAll(getSameLetterTypeList(letterType));
-        ids.addAll(getMyLetterList(user.getUsername()));
+        ids.addAll(letterServiceExternal.getSameLetterTypeList(letterType));
+        ids.addAll(letterServiceExternal.getMyLetterList(user.getUsername()));
 
         while(letter == null){
             Long index = (long)(random.nextInt(letterNum)+1);

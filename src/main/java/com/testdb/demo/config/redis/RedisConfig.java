@@ -71,12 +71,17 @@ public class RedisConfig {
 
         // 以下为自定义对应缓存名缓存时间
         Map<String, RedisCacheConfiguration> initialCacheConfiguration = new HashMap<String, RedisCacheConfiguration>() {{
-            put("demoCache", RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofHours(1))); //1小时
+            put("LetterServiceExternal", RedisCacheConfiguration
+                    .defaultCacheConfig()
+                    .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(redisSerializer))
+                    .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(serializer))
+                    .disableCachingNullValues()
+                    .entryTtl(Duration.ofMinutes(1))); //1分钟
         }};
 
         return RedisCacheManager.builder(RedisCacheWriter.nonLockingRedisCacheWriter(factory))
                 .cacheDefaults(config)
-//                .withInitialCacheConfigurations(initialCacheConfiguration)
+                .withInitialCacheConfigurations(initialCacheConfiguration)
                 .build();
     }
 
