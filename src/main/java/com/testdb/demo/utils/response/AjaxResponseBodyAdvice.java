@@ -49,12 +49,13 @@ public class AjaxResponseBodyAdvice implements ResponseBodyAdvice<Object> {
         return Result.success(body);
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public final ResponseEntity<Result<?>> exceptionHandler(Exception ex, WebRequest request) {
-//        log.error("ExceptionHandler: {}", ex.getMessage());
-//        HttpHeaders headers = new HttpHeaders();
-//        return this.handleException(ex, headers, request);
-//    }
+    @ExceptionHandler(Exception.class)
+    public final ResponseEntity<Result<?>> exceptionHandler(Exception ex, WebRequest request) {
+        log.error("ExceptionHandler: {}",ex.getMessage() );
+        log.error("ExceptionStackTrace: {}", (Object) ex.getStackTrace());
+        HttpHeaders headers = new HttpHeaders();
+        return this.handleException(ex, headers, request);
+    }
 
     /** 异常类的统一处理 */
     protected ResponseEntity<Result<?>> handleException(Exception ex, HttpHeaders headers, WebRequest request) {

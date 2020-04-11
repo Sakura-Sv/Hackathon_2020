@@ -80,7 +80,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     @SneakyThrows
     public void sendConfirmMessage(User user) {
 
-        String to = "1204736871@qq.com";
+        String to = user.getUsername();
         String subject = "听风: 为" + user.getUsername() + "激活账户";
         String context = "<a href=\"https://thenebula.cn/confirm/?confirmCode=" + user.getConfirmCode() +
                 "\">确认激活请点击这里，如果不是您的信息烦请无视！谢谢！"+"</a>";
@@ -204,7 +204,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
                 .put("confirmCode", username,
                         new ConfirmCode(confirmCode, LocalDateTime.now()));
 
-        String to = "1204736871@qq.com";
+        String to = username;
         String subject = "听风: 为" + username + "找回密码";
         String context = "<P>您的验证码为： <b>" + confirmCode + "<b/></P>";
 
