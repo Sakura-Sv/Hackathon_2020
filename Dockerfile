@@ -1,6 +1,7 @@
 # Build Stage for Spring boot application image
 FROM openjdk:8-jdk
 
+ENV MYSQL_PASSWORD=$MYSQL_PASSWORD
 
 COPY ./target/demo-0.0.1-SNAPSHOT.jar app.jar
 
