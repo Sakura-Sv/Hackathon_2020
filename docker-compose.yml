@@ -51,6 +51,8 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
+      args:
+        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     restart: always
     volumes:
       - $PWD/log/:/log
