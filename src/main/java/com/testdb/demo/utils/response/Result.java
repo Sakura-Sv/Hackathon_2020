@@ -11,6 +11,10 @@ import lombok.ToString;
 @NoArgsConstructor
 public class Result<T> {
 
+    /**
+     * 回复工具类
+     */
+
     private Integer status;
     private String message;
     private T data;

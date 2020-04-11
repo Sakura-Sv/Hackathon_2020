@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class WeekMood{
 
+    /**
+     * 用于一周心情包装
+     */
+
     private String moodType;
     private String preview;
 

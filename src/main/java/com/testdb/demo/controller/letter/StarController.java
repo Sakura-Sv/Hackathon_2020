@@ -17,6 +17,11 @@ public class StarController {
     @Autowired
     StarService ss;
 
+    /**
+     * 点赞
+     * @param jsonObject
+     * @return
+     */
     @GetMapping
     public Result<Void> star(Authentication token,
                              @RequestBody JSONObject jsonObject){
@@ -28,6 +33,11 @@ public class StarController {
         return Result.success();
     }
 
+    /**
+     * 获取点赞数
+     * @param aid
+     * @return
+     */
     @GetMapping("/count")
     public Result<Long> star(@RequestParam long aid ){
         return Result.success(ss.countStar(aid));

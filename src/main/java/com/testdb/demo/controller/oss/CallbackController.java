@@ -20,6 +20,10 @@ public class CallbackController {
     @Autowired
     AvatarService as;
 
+    /**
+     * 七牛云回调，用于效验请求，更新头像地址
+     * @param request
+     */
     @PostMapping("/avatar")
     @SneakyThrows
     public void updateUserAvatar(HttpServletRequest request) {

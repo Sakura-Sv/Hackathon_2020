@@ -15,6 +15,10 @@ import java.util.Date;
 @Slf4j
 public class JwtTokenUtil {
 
+    /**
+     * token工具类
+     */
+
     private static InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("lz-jwt.jks"); // 寻找证书文件
     private static PrivateKey privateKey = null;
     private static PublicKey publicKey = null;
@@ -35,7 +39,7 @@ public class JwtTokenUtil {
                 .setClaims(null)
                 .setSubject(subject)
                 .setExpiration(new Date(System.currentTimeMillis() + expirationSeconds * 1000))
-//                .signWith(SignatureAlgorithm.HS512, salt) // 不使用公钥私钥
+//                .signWith(SignatureAlgorithm.HS512, salt) // 不使用公钥私钥就这样
                 .signWith(privateKey, SignatureAlgorithm.RS256)
                 .compact();
     }
@@ -44,7 +48,7 @@ public class JwtTokenUtil {
         String subject = null;
         try {
              Claims claims = Jwts.parserBuilder()
-//                    .setSigningKey(salt) // 不使用公钥私钥
+//                    .setSigningKey(salt) // 不使用公钥私钥就这样
                     .setSigningKey(publicKey)
                     .build()
                     .parseClaimsJws(token).getBody();

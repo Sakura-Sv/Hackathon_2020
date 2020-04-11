@@ -12,6 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Score {
 
+    /**
+     * 用户积分
+     */
+
     @TableId(type = IdType.AUTO)
     private long id;
     private String username;

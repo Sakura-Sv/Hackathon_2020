@@ -12,6 +12,10 @@ import java.util.List;
 @AllArgsConstructor
 public class MessagePage {
 
+    /**
+     * 用于Message分页
+     */
+
     private List<Message> messages;
     private long currentPage;
     private long size;

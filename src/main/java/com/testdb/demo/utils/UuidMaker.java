@@ -9,6 +9,10 @@ import java.util.UUID;
 
 public class UuidMaker {
 
+    /**
+     * 获取UUID4
+     * @return
+     */
     @SneakyThrows
     public static String getUuid(){
         MessageDigest salt = MessageDigest.getInstance("SHA-256");
@@ -16,6 +20,10 @@ public class UuidMaker {
         return Hex.encodeHexString(salt.digest());
     }
 
+    /**
+     * 获取6位数随机验证码
+     * @return
+     */
     public static String randomCode() {
         StringBuilder str = new StringBuilder();
         Random random = new Random();

@@ -36,6 +36,11 @@ public class ReplyService extends ServiceImpl<ReplyMapper, Reply> {
 
     private static final Integer REPLY_TYPE = 3;
 
+    /**
+     * 回复评论 / 回复回复
+     * @param token
+     * @param reply
+     */
     @SneakyThrows
     @Transactional
     public void reply(Authentication token, Reply reply){
@@ -82,9 +87,14 @@ public class ReplyService extends ServiceImpl<ReplyMapper, Reply> {
         return "用户" + nickname + "回复了你的评论";
     }
 
+    /**
+     * 获取回复列表
+     * @param index
+     * @param pid 目标评论
+     * @return
+     */
     public Page<Reply> getReplyList(int index, long pid){
         Page<Reply> page = new Page<>(index, 20);
-//        System.out.println(commentMapper.getCommentList(motherId));
         return page.setRecords(this.baseMapper.getReplyList(pid, page));
     }
 

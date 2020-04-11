@@ -8,6 +8,10 @@ import java.util.Date;
 
 public class DateTimeUtil {
 
+    /**
+     * Date类与 LocalDate类的转换工具类
+     */
+
     public static LocalDateTime toLocalDateTimeViaInstant(Date dateToConvert) {
         return dateToConvert.toInstant()
                 .atZone(ZoneId.systemDefault())

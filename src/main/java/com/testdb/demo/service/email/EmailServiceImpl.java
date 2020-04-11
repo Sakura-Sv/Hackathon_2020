@@ -22,6 +22,13 @@ public class EmailServiceImpl implements EmailService {
     @Value("${spring.mail.from}")
     private String from;
 
+    /**
+     * 发送文本文件
+     * @param to 目标
+     * @param subject 标题
+     * @param content 内容
+     * @throws MessagingException
+     */
     @Override
     @Async
     public void sendSimpleMail(String to, String subject, String content)
@@ -34,6 +41,14 @@ public class EmailServiceImpl implements EmailService {
         javaMailSender.send(message);
     }
 
+    /**
+     * 同上，增加了抄写对象
+     * @param to
+     * @param subject
+     * @param content
+     * @param cc 抄写者列表
+     * @throws MessagingException
+     */
     @Override
     @Async
     public void sendSimpleMail(String to, String subject, String content, String... cc)
@@ -47,6 +62,13 @@ public class EmailServiceImpl implements EmailService {
         javaMailSender.send(message);
     }
 
+    /**
+     * 发送html邮件
+     * @param to 目标
+     * @param subject 标题
+     * @param content 内容
+     * @throws MessagingException
+     */
     @Override
     @Async
     public void sendHtmlMail(String to, String subject, String content)
@@ -61,6 +83,14 @@ public class EmailServiceImpl implements EmailService {
         javaMailSender.send(message);
     }
 
+    /**
+     * 同上，增加了抄写对象
+     * @param to
+     * @param subject
+     * @param content
+     * @param cc 抄写者列表
+     * @throws MessagingException
+     */
     @Override
     @Async
     public void sendHtmlMail(String to, String subject, String content, String... cc)
@@ -75,6 +105,14 @@ public class EmailServiceImpl implements EmailService {
         javaMailSender.send(message);
     }
 
+    /**
+     * 发送 带附件的HTML邮件
+     * @param to
+     * @param subject
+     * @param content
+     * @param filePath 文件路径
+     * @throws MessagingException
+     */
     @Override
     @Async
     public void sendAttachmentsMail(String to, String subject, String content, String filePath)
@@ -94,6 +132,15 @@ public class EmailServiceImpl implements EmailService {
         javaMailSender.send(message);
     }
 
+    /**
+     * 同上 增加了抄写者
+     * @param to
+     * @param subject
+     * @param content
+     * @param filePath
+     * @param cc
+     * @throws MessagingException
+     */
     @Override
     @Async
     public void sendAttachmentsMail(String to, String subject, String content, String filePath, String... cc)

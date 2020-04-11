@@ -50,6 +50,10 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     @Autowired
     private ScoreService scoreService;
 
+    /**
+     * 注册账号
+     * @param user
+     */
     @Transactional
     @SneakyThrows
     public void signUp(User user) {
@@ -68,6 +72,10 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         sendConfirmMessage(user);
     }
 
+    /**
+     * 发送确认邮件
+     * @param user
+     */
     @SneakyThrows
     public void sendConfirmMessage(User user) {
 
@@ -79,6 +87,11 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
     }
 
+    /**
+     * 获取基本信息
+     * @param username 用户名
+     * @return
+     */
     @SneakyThrows
     @Cacheable(key = "#root.method.name+#username", unless = "#username==null")
     public BaseUser getBaseInfo(String username){
@@ -89,6 +102,11 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         return user;
     }
 
+    /**
+     * 激活用户账号
+     * @param confirmCode 激活码
+     * @return
+     */
     @Transactional
     @SneakyThrows
     public int confirmUser(String confirmCode){
@@ -110,12 +128,22 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         return 1;
     }
 
+    /**
+     * 检查用户名是否是无效用户名
+     * @param username 用户名
+     * @return
+     */
     @SneakyThrows
     @Cacheable(key = "#root.method.name+#username", unless = "#username==null")
     public Boolean checkInvalidUser(String username){
         return userMapper.selectOne(new QueryWrapper<User>().select("id").eq("username", username)) == null;
     }
 
+    /**
+     * 更新用户基本信息
+     * @param username
+     * @param jsonParam
+     */
     @Transactional
     @SneakyThrows
     @CacheEvict(key="'getBaseInfo'+#username")
@@ -154,6 +182,10 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         userMapper.updateUserInfo(user);
     }
 
+    /**
+     * 获取激活码
+     * @param username
+     */
     @SneakyThrows
     @SuppressWarnings("unchecked")
     public void getConfirmCode(String username){
@@ -170,6 +202,13 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         emailServiceImpl.sendHtmlMail(to, subject, context);
     }
 
+    /**
+     * 找回密码
+     * @param username 用户名
+     * @param newPassword 新密码
+     * @param confirmCode 验证码
+     * @return
+     */
     @SneakyThrows
     @Transactional
     @SuppressWarnings("unchecked")
@@ -201,6 +240,13 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         return 1;
     }
 
+    /**
+     * 修改密码
+     * @param username 用户名
+     * @param oldPassword 旧密码
+     * @param newPassword 新密码
+     * @return
+     */
     @SneakyThrows
     @Transactional
     public Boolean changePassword(String username, String oldPassword, String newPassword){
@@ -221,6 +267,11 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         return true;
     }
 
+    /**
+     * 将Authentication转换为BaseUser
+     * @param token
+     * @return
+     */
     @SneakyThrows
     public static BaseUser t2b(Authentication token){
         return (BaseUser)token.getPrincipal();

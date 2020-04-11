@@ -16,6 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 public class AvatarService extends ServiceImpl<AvatarMapper, Avatar> {
 
+    /**
+     * 上传头像 测试用
+     * @param username
+     */
     @SneakyThrows
     public void uploadAvatarTest(String username){
         /**
@@ -32,6 +36,11 @@ public class AvatarService extends ServiceImpl<AvatarMapper, Avatar> {
         QiniuUtil.uploadTest(sourceUrl, targetUrl, token);
     }
 
+    /**
+     * 获取头像上传的token
+     * @param username
+     * @return
+     */
     @SneakyThrows
     public String uploadAvatar(String username){
         StringMap policy = new StringMap();
@@ -44,6 +53,10 @@ public class AvatarService extends ServiceImpl<AvatarMapper, Avatar> {
         return token;
     }
 
+    /**
+     * 检查七牛云的回调 更新头像
+     * @param request
+     */
     @SneakyThrows
     public void uploadAvatarCallback(HttpServletRequest request){
         byte[] callbackBody = new byte[2048];

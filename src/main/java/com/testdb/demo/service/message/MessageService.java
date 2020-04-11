@@ -27,6 +27,20 @@ public class MessageService extends ServiceImpl<MessageMapper, Message> {
     // 单页信息数
     private static final int SIZE = 20;
 
+    /**
+     * 发送通知
+     * @param targetUsername  目标用户名
+     * @param username  发送用户名
+     * @param avatarUrl 发送用户头像路径
+     * @param createTime 行为产生时间
+     * @param tips 回复的提示信息
+     * @param content 回复的内容
+     * @param preview 被回复的内容预览
+     * @param letterType 被回复的信的类型  1/2/3  幸运信 解忧信 回信
+     * @param contentType 被回复的评论类型 1/2/3  点赞   评论  楼中楼
+     * @param pid 信息父级id   仅可以为文章id/评论id
+     * @param targetId 目标信息id  可以为文章id/评论id/回复id
+     */
     @CacheEvict(key = "'getMessageList'+#username")
     public void sendMessage(String targetUsername,
                             String username,
@@ -50,6 +64,12 @@ public class MessageService extends ServiceImpl<MessageMapper, Message> {
                         pid, targetId));
     }
 
+    /**
+     * 获取个人通知列表
+     * @param username 用户名
+     * @param index 页码
+     * @return
+     */
     @SneakyThrows
     @Cacheable(key = "#root.method.name+#username", unless = "#username==null")
     public MessagePage getMessageList(String username, int index)  {
@@ -76,9 +96,9 @@ public class MessageService extends ServiceImpl<MessageMapper, Message> {
 
     /**
      * 工具方法  用于获取信息列表   还需要将Object转化为Message
-     * @param messagePage
-     * @param username
-     * @param index
+     * @param messagePage 通知列表
+     * @param username 用户名
+     * @param index 第几页通知
      * @return
      * @throws Exception
      */
@@ -106,6 +126,11 @@ public class MessageService extends ServiceImpl<MessageMapper, Message> {
         return list;
     }
 
+    /**
+     * 获取页码数
+     * @param messageNum 通知数
+     * @return
+     */
     public long getPageNum(long messageNum){
         if(messageNum % SIZE == 0){
             return messageNum / SIZE;

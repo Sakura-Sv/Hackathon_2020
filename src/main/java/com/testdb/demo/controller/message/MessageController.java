@@ -20,6 +20,11 @@ public class MessageController {
     @Autowired
     MessageService messageService;
 
+    /**
+     * 获取通知列表
+     * @param index
+     * @return
+     */
     @GetMapping
     public Result<MessagePage> getMessageList(Principal principal,
                                               @RequestParam(value = "index", defaultValue = "1") int index){

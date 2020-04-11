@@ -42,12 +42,23 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment>{
 
     private static final Integer COMMENT_TYPE = 2;
 
+    /**
+     * 检查回复的id是否指向有效回复
+     * @param commentId
+     * @return
+     */
     @SneakyThrows
     @Cacheable(key = "#root.method.name+#commentId", unless = "#commentId==null")
     public Boolean checkInvalidCommentId(long commentId){
         return commentMapper.selectOne(new QueryWrapper<Comment>().select("id").eq("id", commentId)) == null;
     }
 
+    /**
+     * 获取文章的评论列表
+     * @param index 页码
+     * @param aid 文章id
+     * @return
+     */
     @SneakyThrows
     @Cacheable(key = "#root.method.name+#aid+'end'+#index", unless = "#aid==null")
     public Page<Comment> getCommentList(int index, long aid){
@@ -55,6 +66,11 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment>{
         return page.setRecords(this.baseMapper.getCommentList(aid, page));
     }
 
+    /**
+     * 发送评论
+     * @param token 用户信息
+     * @param comment 评论
+     */
     @SneakyThrows
     @Transactional
     public void postComment(Authentication token, Comment comment){
@@ -68,12 +84,13 @@ public class CommentService extends ServiceImpl<CommentMapper, Comment>{
                 .getOne(new QueryWrapper<Letter>()
                         .select("author", "letter_type", "preview")
                         .eq("id",comment.getAid()));
-
+        //插入评论
         commentMapper.insert(comment);
+        // 增加积分
         scoreService.addScore(targetLetter.getAuthor(), ScoreService.COMMENT_SCORE);
-
+        // 清理目标文章评论的缓存
         cacheUtil.cleanMoodList(comment.getAid().toString());
-
+        // 发送通知
         messageService.sendMessage(targetLetter.getAuthor(),
                 comment.getCommenterName(),
                 user.getAvatar(),

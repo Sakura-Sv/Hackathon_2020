@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
@@ -48,12 +49,12 @@ public class AjaxResponseBodyAdvice implements ResponseBodyAdvice<Object> {
         return Result.success(body);
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public final ResponseEntity<Result<?>> exceptionHandler(Exception ex, WebRequest request) {
-//        log.error("ExceptionHandler: {}", ex.getMessage());
-//        HttpHeaders headers = new HttpHeaders();
-//        return this.handleException(ex, headers, request);
-//    }
+    @ExceptionHandler(Exception.class)
+    public final ResponseEntity<Result<?>> exceptionHandler(Exception ex, WebRequest request) {
+        log.error("ExceptionHandler: {}", ex.getMessage());
+        HttpHeaders headers = new HttpHeaders();
+        return this.handleException(ex, headers, request);
+    }
 
     /** 异常类的统一处理 */
     protected ResponseEntity<Result<?>> handleException(Exception ex, HttpHeaders headers, WebRequest request) {

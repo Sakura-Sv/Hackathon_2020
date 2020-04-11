@@ -24,11 +24,12 @@ public class RedisClean {
     @Autowired
     RedisTemplate redisTemplate;
 
+
+    /**
+     * 每天四点整开始定时清理个人MoodList的缓存
+     */
     @Scheduled(cron="0 0 4 * * ?")
     public void cleanMoodList(){
-        /**
-         * 每天四点整开始定时清理个人MoodList的缓存
-         */
         log.info("Begin to clean redis mood list cache");
         String regexp = "HearWind:MoodServicegetMoodList*";
         Set<Object> results = redisService.scan(regexp);

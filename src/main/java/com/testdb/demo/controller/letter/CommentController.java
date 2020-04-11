@@ -26,6 +26,12 @@ public class CommentController {
     @Autowired
     LetterService ls;
 
+    /**
+     * 查看评论列表
+     * @param index
+     * @param pid
+     * @return
+     */
     @GetMapping
     public Result<Page<Comment>> getCommentList(@RequestParam(value = "index", defaultValue = "1") int index,
                                                 @RequestParam long pid) {
@@ -37,6 +43,11 @@ public class CommentController {
         return Result.success(cs.getCommentList(index, pid));
     }
 
+    /**
+     * 发表评论
+     * @param comment
+     * @return
+     */
     @PostMapping
     public Result<Void> postComment(Authentication token, @RequestBody Comment comment) {
 
@@ -48,6 +59,11 @@ public class CommentController {
         return Result.success();
     }
 
+    /**
+     * 获取评论数
+     * @param aid
+     * @return
+     */
     @GetMapping("/count")
     public Result<Integer> getCommentNum(@RequestParam Long aid) {
         if (aid == null || ls.checkInvalidLetterId(aid)) {

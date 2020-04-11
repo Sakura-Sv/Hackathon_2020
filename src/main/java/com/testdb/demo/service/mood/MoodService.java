@@ -33,6 +33,12 @@ public class MoodService extends ServiceImpl<MoodMapper, Mood> {
     private static final Integer MAX_MOOD_TYPE = 7;
     private static final Integer MIN_MOOD_TYPE = 1;
 
+    /**
+     * 发送今日心情
+     * @param mood 心情
+     * @param username 用户名
+     * @return 状态码
+     */
     @SneakyThrows
     @CacheEvict(key = "'getMoodList'+#username")
     public int addMood(Mood mood, String username){
@@ -65,11 +71,19 @@ public class MoodService extends ServiceImpl<MoodMapper, Mood> {
         return 0;
     }
 
+    /**
+     * 获取日期
+     * @return
+     */
     @SneakyThrows
     public LocalDate getCurrentDay(){
         return LocalDate.now();
     }
 
+    /**
+     * 获取星期几
+     * @return
+     */
     @SneakyThrows
     public String getCurrentDayOfWeek(){
         return getCurrentDay()
@@ -77,6 +91,11 @@ public class MoodService extends ServiceImpl<MoodMapper, Mood> {
                 .getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
     }
 
+    /**
+     * 获取一周心情预览列表
+     * @param username 用户名
+     * @return
+     */
     @SneakyThrows
     @Cacheable(key = "#root.method.name+#username", unless = "#username==null")
     public Map<String, WeekMood> getMoodList(String username){
@@ -92,6 +111,11 @@ public class MoodService extends ServiceImpl<MoodMapper, Mood> {
         return newList;
     }
 
+    /**
+     * 按照今日日期顺序构建一周心情列表 以供填充
+     * @param beginTime 开始时间
+     * @return
+     */
     @SneakyThrows
     public Map<String, WeekMood> createWeekMoodList(LocalDate beginTime){
         Map<String, WeekMood> list = new LinkedHashMap<>();
@@ -106,6 +130,11 @@ public class MoodService extends ServiceImpl<MoodMapper, Mood> {
         return list;
     }
 
+    /**
+     * 随机获取列表的两个心情
+     * @param oldList
+     * @return
+     */
     public List<BaseMood> randomize(List<BaseMood> oldList){
         Random random = new Random(System.currentTimeMillis());
         List<BaseMood> newList = new ArrayList<>();
@@ -114,6 +143,12 @@ public class MoodService extends ServiceImpl<MoodMapper, Mood> {
         return newList;
     }
 
+    /**
+     * 获取与userMoodType相同的两个心情
+     * @param username 用户名
+     * @param userMoodType 心情类型
+     * @return
+     */
     public List<BaseMood> getRandomMood(String username, String userMoodType) {
         List<BaseMood> oldList = moodMapper.getOthersMoodList(username, getCurrentDay(),userMoodType);
         if(oldList.isEmpty() || oldList.size() == 1) {
@@ -122,6 +157,11 @@ public class MoodService extends ServiceImpl<MoodMapper, Mood> {
         return randomize(oldList);
     }
 
+    /**
+     * 检查心情类型是否合法
+     * @param moodType 心情类型
+     * @return
+     */
     public Boolean checkInvalidMoodType(String moodType) {
         try{
             int type = Integer.parseInt(moodType);

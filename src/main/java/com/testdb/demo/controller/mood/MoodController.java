@@ -23,11 +23,20 @@ public class MoodController {
     @Autowired
     MoodService ms;
 
+    /**
+     * 获取一周心情
+     * @return
+     */
     @GetMapping
     public Result<Map<String, WeekMood>> getMoodList(Principal principal){
         return Result.success(ms.getMoodList(principal.getName()));
     }
 
+    /**
+     * 发布今日心情
+     * @param mood
+     * @return
+     */
     @PostMapping
     @SneakyThrows
     public Result<Void> addMood(Principal principal,
@@ -48,6 +57,11 @@ public class MoodController {
         }
     }
 
+    /**
+     * 随机返回两个跟自己今日心情相同类型的心情
+     * @param moodType
+     * @return
+     */
     @GetMapping("/others")
     public Result<List<BaseMood>> getRandomMood(Principal principal, @RequestParam("moodType") String moodType){
         List<BaseMood> results =ms.getRandomMood(principal.getName(),moodType);

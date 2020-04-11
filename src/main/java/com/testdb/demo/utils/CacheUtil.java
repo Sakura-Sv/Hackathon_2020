@@ -15,11 +15,11 @@ public class CacheUtil {
     @Autowired
     RedisService redisService;
 
+    /**
+     * 清理评论缓存
+     */
     @Async
     public void cleanMoodList(String aid){
-        /**
-         * 清理评论缓存
-         */
         log.info("Begin to clean redis mood list cache");
         String regexp = "HearWind:CommentServicegetCommentList"+aid+"end*";
         Set<Object> results = redisService.scan(regexp);

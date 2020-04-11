@@ -52,6 +52,10 @@ public class QiniuUtil {
         return auth.uploadToken(bucketName, key);
     }
 
+    /**
+     * 获取随机key的上传token
+     * @return
+     */
     @SneakyThrows
     public static String getRandomKeyToken() {
         key = UuidMaker.getUuid();
@@ -59,6 +63,12 @@ public class QiniuUtil {
         return auth.uploadToken(bucketName, key);
     }
 
+    /**
+     * 返回带policy的token
+     * @param uploadPath
+     * @param putPolicy
+     * @return
+     */
     @SneakyThrows
     public static String getTokenWithPolicy(String uploadPath, StringMap putPolicy){
         key = uploadPath;
@@ -82,6 +92,12 @@ public class QiniuUtil {
         }
     }
 
+    /**
+     * 效验回调有效性
+     * @param request
+     * @param callbackBody
+     * @return
+     */
     @SneakyThrows
     public static Boolean validateCallback(HttpServletRequest request,
                                                byte[] callbackBody) {

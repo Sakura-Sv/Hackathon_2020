@@ -21,6 +21,12 @@ public class HelloController {
         return "index";
     }
 
+    /**
+     * 用户账号激活接口
+     * @param confirmCode
+     * @param model
+     * @return
+     */
     @GetMapping("/confirm")
     public String confirmUser(@RequestParam String confirmCode, Model model) {
         int status = us.confirmUser(confirmCode);

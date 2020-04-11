@@ -31,6 +31,13 @@ public class StarService {
 
     public static final Integer STAR_TYPE = 1;
 
+    /**
+     * 点赞
+     * @param token 用户信息
+     * @param targetUsername 点赞目标用户名
+     * @param aid 点赞文章id
+     * @return
+     */
     @SneakyThrows
     public Boolean star(Authentication token, String targetUsername, long aid){
         BaseUser user = UserService.t2b(token);
@@ -65,6 +72,11 @@ public class StarService {
         throw new Exception("Wrong Letter Type");
     }
 
+    /**
+     * 获取点赞数
+     * @param letterId 信id
+     * @return
+     */
     public Long countStar(long letterId){
         return redisService.sGetSetSize(letterId + ".star");
     }

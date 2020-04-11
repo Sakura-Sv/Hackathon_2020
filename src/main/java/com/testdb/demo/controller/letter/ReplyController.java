@@ -22,6 +22,12 @@ public class ReplyController {
     @Autowired
     CommentService cs;
 
+    /**
+     * 获取楼中楼回复列表
+     * @param index
+     * @param pid
+     * @return
+     */
     @GetMapping
     public Result<Page<Reply>> getCommentList(@RequestParam(value = "index", defaultValue = "1") int index,
                                                 @RequestParam long pid) {
@@ -31,7 +37,11 @@ public class ReplyController {
         return Result.success(rs.getReplyList(index, pid));
     }
 
-
+    /**
+     * 回复评论
+     * @param reply
+     * @return
+     */
     @PostMapping
     public Result<Void> reply(Authentication token,
                               @RequestBody Reply reply){

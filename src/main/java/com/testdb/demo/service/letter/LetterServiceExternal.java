@@ -24,6 +24,11 @@ public class LetterServiceExternal {
     @Autowired
     LetterMapper letterMapper;
 
+    /**
+     * 获取所有我的信件的id列表
+     * @param username
+     * @return
+     */
     @SneakyThrows
     @Cacheable(key = "#root.method.name+#username", unless = "#username==null")
     public List<Long> getMyLetterList(String username){
@@ -37,6 +42,11 @@ public class LetterServiceExternal {
         return results;
     }
 
+    /**
+     * 获取所有非目标信类型的id列表
+     * @param letterType
+     * @return
+     */
     @SneakyThrows
     @Cacheable(key = "#root.method.name+#letterType", unless = "#letterType==null")
     public List<Long> getSameLetterTypeList(String letterType){

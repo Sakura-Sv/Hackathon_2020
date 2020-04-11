@@ -1,7 +1,6 @@
 package com.testdb.demo.service.user;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.testdb.demo.entity.user.BaseUser;
 import com.testdb.demo.entity.user.Score;
@@ -27,6 +26,11 @@ public class ScoreService extends ServiceImpl<ScoreMapper, Score> {
 
     public static final long BASE_SCORE = 1;
 
+    /**
+     * 获取一个人的树的等级
+     * @param token
+     * @return
+     */
     @Cacheable(key = "#root.method.name+#username", unless = "#username==null")
     public Integer getScore(Authentication token){
         BaseUser user = UserService.t2b(token);
@@ -34,6 +38,11 @@ public class ScoreService extends ServiceImpl<ScoreMapper, Score> {
         return calculateLevel(score.getScore());
     }
 
+    /**
+     * 通过分数计算等级
+     * @param score
+     * @return
+     */
     public Integer calculateLevel(long score) {
         if (score > 1200) {
             return 3;
