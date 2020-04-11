@@ -61,8 +61,9 @@ public class UserController {
             case 3: return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("无效的验证码！"));
             case 2: return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("该验证码已过期！"));
             case 1: return Result.failure(ResultStatus.WRONG_PARAMETERS.setMessage("该账号已被激活！"));
-            default: return Result.success();
+            case 0: return Result.success();
         }
+        return Result.failure(ResultStatus.FAILURE);
     }
 
     @GetMapping(value = "/info")

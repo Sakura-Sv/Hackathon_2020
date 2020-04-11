@@ -31,10 +31,10 @@ public class HelloController {
     public String confirmUser(@RequestParam String confirmCode, Model model) {
         int status = us.confirmUser(confirmCode);
         switch(status){
-            case 3: model.addAttribute("message","不正确的激活码");
-            case 2: model.addAttribute("message","抱歉，您的激活码已过期");
-            case 1: model.addAttribute("message","该账号已被激活过哦");
-            default: model.addAttribute("message","恭喜您，激活成功！");
+            case 3: model.addAttribute("message","不正确的激活码"); break;
+            case 2: model.addAttribute("message","抱歉，您的激活码已过期"); break;
+            case 1: model.addAttribute("message","该账号已被激活过哦"); break;
+            case 0: model.addAttribute("message","恭喜您，激活成功！"); break;
         }
         return "confirm";
     }

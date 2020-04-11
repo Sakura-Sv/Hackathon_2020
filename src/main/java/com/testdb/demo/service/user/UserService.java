@@ -111,7 +111,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     @SneakyThrows
     public int confirmUser(String confirmCode){
 
-        //2 验证码已过期 1 用户已激活 0 成功
+        // 3 无效的激活码 2 验证码已过期 1 用户已激活 0 成功
 
         User user = userMapper.selectOne(new QueryWrapper<User>().eq("confirm_code", confirmCode));
         if(user == null){
