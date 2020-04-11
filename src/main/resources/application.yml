@@ -6,7 +6,7 @@ spring:
   profiles: dev
   datasource:
     username: guest
-    password: 123456
+    password: ${MYSQL_PASSWORD:dev}
     url: jdbc:mysql://localhost/db_test?serverTimezone=CTT
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
@@ -50,7 +50,7 @@ spring:
   profiles: pro
   datasource:
     username: guest
-    password: 123456
+    password: ${MYSQL_PASSWORD:pro}
     url: jdbc:mysql://lz-mysql/db_test?serverTimezone=CTT
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
