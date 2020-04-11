@@ -59,6 +59,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     public void signUp(User user) {
         // 加密密码
         String password = passwordEncoder.encode(user.getPassword());
+        System.out.println(password);
         user.setPassword(password);
         user.setConfirmCode(UuidMaker.getUuid());
         // 设置不可用
@@ -203,7 +204,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
                         new ConfirmCode(confirmCode, LocalDateTime.now()));
 
         String to = "1204736871@qq.com";
-        String subject = "为" + username + "找回密码";
+        String subject = "听风: 为" + username + "找回密码";
         String context = "<P>您的验证码为： <b>" + confirmCode + "<b/></P>";
 
         emailServiceImpl.sendHtmlMail(to, subject, context);
@@ -235,7 +236,6 @@ public class UserService extends ServiceImpl<UserMapper, User> {
                 .toMinutes() > 10){
             return 2;
         }
-
         if(confirmCode.equals(dbConfirmCode.getConfirmCode())){
             this.update(new UpdateWrapper<User>()
                     .eq("username", username)

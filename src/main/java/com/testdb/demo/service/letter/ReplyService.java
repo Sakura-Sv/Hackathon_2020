@@ -51,6 +51,10 @@ public class ReplyService extends ServiceImpl<ReplyMapper, Reply> {
         else {
             reply.setPreview(reply.getContent());
         }
+        reply.setAid(commentService.getOne(new QueryWrapper<Comment>()
+                .select("aid")
+                .eq("id",reply.getCommentId()))
+                .getAid());
         reply.setCommenterName(user.getUsername());
         reply.setNickname(user.getNickname());
         reply.setCommentTime(LocalDateTime.now());
