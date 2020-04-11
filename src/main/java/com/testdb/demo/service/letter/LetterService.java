@@ -52,12 +52,12 @@ public class LetterService extends ServiceImpl<LetterMapper, Letter> {
         Random random = new Random();
         int letterNum = this.count();
         while(letter == null){
-            Integer index = random.nextInt(letterNum);
+            Integer index = random.nextInt(letterNum)+1;
             if(redisService.hGet("RandomLetter", user.getUsername())==index){
                 continue;
             }
             letter = letterMapper.getRandomLetter(index, letterType);
-            if(letter.getAuthor()==user.getUsername()) {
+            if(letter.getAuthor().equals(user.getUsername())) {
                 letter = null;
             }
         }
